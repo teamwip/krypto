@@ -1,0 +1,133 @@
+\documentclass[a4paper, fontsize=12pt, toc=bibliographynumbered]{scrreprt}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{tgheros}
+\usepackage{microtype}
+\usepackage[onehalfspacing]{setspace}
+\usepackage[defaultlines=2, all]{nowidow}
+\usepackage[left=4cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage[ngerman]{babel}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{graphicx}
+\usepackage{tabu}
+\usepackage[footnote]{acronym}
+\usepackage[colorlinks=true, linktoc=page, urlcolor=blue, citecolor=Green]{hyperref}
+\usepackage[ngerman]{cleveref}
+\makeatletter
+\g@addto@macro{\maketitle}{\def\author#1{\def\@author{#1}}}
+\newcommand*{\extendsectlevel}[1]{%
+  \expandafter\newcommand\expandafter*\csname saved@#1\endcsname{}%
+  \expandafter\let\csname saved@#1\expandafter\endcsname\csname #1\endcsname
+  \expandafter\renewcommand\expandafter*\csname #1\endcsname{%
+    \expandafter\let\csname author@#1\endcsname\@author
+    \@ifstar
+      {\csname star@#1\endcsname}%
+      {\@dblarg{\csname opt@#1\endcsname}}%
+  }%
+  \expandafter\newcommand\expandafter*\csname star@#1\endcsname[1]{%
+    \csname saved@#1\endcsname*{##1%
+      \expandafter\ifx\csname author@#1\endcsname\@empty\else
+        \hfill\linebreak{\normalsize
+          \textmd{\textit{\csname author@#1\endcsname}}}%
+      \fi
+    }%
+  }%
+  \expandafter\newcommand\expandafter*\csname opt@#1\endcsname[2][]{%
+    \csname saved@#1\endcsname[{##1%
+      \expandafter\ifx\csname author@#1\endcsname\@empty\else
+        \enskip\textmd{\textit{(\csname author@#1\endcsname)}}%
+      \fi
+    }]{##2%
+      \expandafter\ifx\csname author@#1\endcsname\@empty\else
+        \hfill\linebreak{\normalsize
+          \textmd{\textit{\csname author@#1\endcsname}}}%
+      \fi
+    }%
+  }%
+}
+\extendsectlevel{chapter}
+\extendsectlevel{section}
+\extendsectlevel{subsection}
+\makeatother
+\begin{document}
+\newcommand{\headerrule}{\tabucline -}
+\newcommand{\abbildung}[2]{\begin{figure}\centering
+    \fbox{\includegraphics[width=0.8\textwidth]{#1}}\caption{#2}
+    \label{fig:#1}\end{figure}}
+\setkomafont{chapterentry}{\bfseries}
+
+\author{}
+\begin{titlepage}
+  \begin{center}
+    \textsc{\large Fachhochschule der Wirtschaft\\FHDW}\\[1em]
+    \textsc{\large Bergisch Gladbach}\\[2em]
+    \textsc{Schriftliche Ausarbeitung}\\[6em]
+    {\LARGE Kryptographie II}\\[25em]
+    \begin{tabu} to 0.8\textwidth {X[l] X[r]}
+      \emph{Autoren:}\linebreak
+      An-Nam \textsc{Pham},\linebreak
+      Leonie \textsc{Schiburr},\linebreak
+      Patrick \textsc{Künzel},\linebreak
+      Vasilij \textsc{Schneidermann}
+      &
+      \emph{Pr"ufer:}\linebreak
+      Ralf \textsc{Schumann}
+    \end{tabu}
+    \vfill
+    \emph{Abgabetermin:}\\
+    \today
+  \end{center}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% Akronyme
+
+\newacro{PKI}{Public Key Infrastructure}
+\newacro{RSA}{Rivest, Shamir, Adleman}
+\newacro{MD5}{Message Digest 5}
+\newacro{SHA1}{Secure Hash Algorithm 1}
+
+\author{Vasilij Schneidermann}
+\chapter{Einleitung}
+
+Asymmetrische Kryptographie ist super!
+
+\include{an-nam.tex}
+\include{patrick.tex}
+\include{vasilij.tex}
+\include{leonie.tex}
+
+\author{}
+\chapter{Zusammenfassung}
+
+Asymmetrische Kryptographie ist toll!
+
+\author{}
+\chapter{Ehrenw"ortliche Erkl"arung}
+
+Hiermit versichern wir diese Arbeit selbstst"andig verfasst und keine
+anderen als die angegebenen Quellen benutzt zu haben.  W"ortliche und
+sinngem"a"se Zitate sind kenntlich gemacht.  "Uber Zitierrichtlinien
+sind wir schriftlich informiert worden.
+
+\renewcommand{\bibname}{Quellenverzeichnis}
+\begin{thebibliography}{9}
+  \BreakBibliography{\minisec{Monographien}}
+\bibitem{foo} Doe, John (1999), \emph{Random Monography}, erste
+  Auflage, New York, 1999
+  \BreakBibliography{\minisec{Internetquellen}}
+\bibitem{bar} Anonymous (2016), \emph{Random Rant}, Online im
+  Internet: \url{http://example.com/}, Stand 25.02.2016
+\end{thebibliography}
+
+\end{document}

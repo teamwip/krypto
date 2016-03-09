@@ -4,7 +4,7 @@
 Online-Zahlungen sind aus unserem Alltag nichtmehr wegzudenken. Aus Paypals
 letztem Quartalsbericht für das Jahr 2015 konnte man entnehmen, dass allein am
 "`Cyber Monday"' 450 Zahlungen pro Sekunde verarbeitet wurden. Das sind circa
-1,6 Millionen Geldbewegungen in einer Stunde.\footnote{Vgl. \citet{MotleyFool}}
+1,6 Millionen Geldbewegungen in einer Stunde.\footnote{Vgl. \cite{MotleyFool}}
 Für Hacker demnach ein Paradies, um Nutzerdaten oder Geldflüsse zu beeinflussen.
 Um dieses Szenario zu vermeiden, werden z.B. Online-Transaktionen durch
 verschiedene Verschlüsselungsverfahren (auch Kryptosysteme genannt) gesichert.
@@ -16,10 +16,10 @@ Dieses Kapitel beschäftigt sich mit dem Konzept/ der Funktionsweise von RSA,
 seiner mathematischen Durchführung/Besonderheiten (anhand eines Beispiels
 dargestellt) und der Sicherheit.
 \section{Einleitung}
-Das RSA-Verfahren wurde von Ron \textbf{R}ivest, Adi \textbf{S}hamir und Leonard \textbf{A}dlemann 
+Das RSA-Verfahren wurde von Ron \textbf{R}ivest, Adi \textbf{S}hamir und Leonard \textbf{A}dlemann
 entwickelt. 1977 entstand die erste öffentliche Version des
 Verschlüsselungsverfahrens.\footnote{Vgl.
-\citet{RSAWiki}} Es ist verwandt mit dem "`Rabin-Kryptosystem"'. RSA basiert auf
+\cite{RSAWiki}} Es ist verwandt mit dem "`Rabin-Kryptosystem"'. RSA basiert auf
 2 wichtigen Grundideen:
 \begin{enumerate}
   \item Public-Key Verschlüsselung: \newline
@@ -45,26 +45,26 @@ Verschlüsselungsverfahrens.\footnote{Vgl.
   \item Digitale Signatur: \newline
 	Das RSA-Verfahren kann ebenso zur Signierung von Nachrichten benutzt werden.
 	Hierbei wird die Klartext-Nachricht des Senders mit dem Private-Key
-	verschlüsselt und mit dem öffentlichen Schlüssel des Empfängers entschlüsselt. 
+	verschlüsselt und mit dem öffentlichen Schlüssel des Empfängers entschlüsselt.
 	Mit dem privaten Schlüssel eine Nachricht zu "`verschlüsseln"' ist keinerlei
 	ein Widerspruch unter der Prämisse, dass $T = V$ (Klartext gleich Geheimtext)
 	ist.
 	\begin{displaymath}
-	E(T) = C \ \ \ \ \ \footnote{Vgl. \citet{RSAAlgorithm} - S.
+	E(T) = C \ \ \ \ \ \footnote{Vgl. \cite{RSAAlgorithm} - S.
   1}
 	\end{displaymath}
 	\begin{center}
 	\emph{E = Verschlüsseln (Encrypt); T = Text; C = Ciphertext (Geheimtext) }
 	\end{center}
 	Die Zahlen, welche die Nachricht repräsentieren unterscheiden keinen Klartext
-	von einem Geheimtext. Die Interpretation des Lesers wiederum entscheidet, ob 
+	von einem Geheimtext. Die Interpretation des Lesers wiederum entscheidet, ob
 	der Text einen logischen Zusammenhang ergibt (dann ist es der sogenannte
 	"`Klartext"') oder nicht (dann ist es der Geheimtext). Durch die
 	Verschl+sselung mit dem privaten Schlüssel wird nun erreicht, dass wenn der
 	Empfänger empfangenen Text entschlüsselt, er eine lesbare Nachricht zu Augen
 	bekommt.
 	\begin{displaymath}
-	D(C) = D(E(T)) = T \ \ \ \ \ \footnote{Vgl. \citet{RSAAlgorithm} - S.
+	D(C) = D(E(T)) = T \ \ \ \ \ \footnote{Vgl. \cite{RSAAlgorithm} - S.
   2}
 	\end{displaymath}
 	\begin{center}
@@ -120,10 +120,10 @@ Im Folgenden werden die einzelnen Schritt ausführlich erläutert.
   Der öffentliche Schlüssel setzt sich nun aus den Werten $e$ und $N$ zusammen.
   \begin{displaymath}
   KeyOeffentlich = (e,N)
-  \end{displaymath} 
+  \end{displaymath}
   $p$, $q$ und $\phi(N)$
   dürfen nicht rausgegeben werden. \newline\newline
-  Für den privaten Schlüssel bestimmt man $d$ mit 
+  Für den privaten Schlüssel bestimmt man $d$ mit
   \begin{displaymath}
   e*d \equiv 1 \ mod(\phi(N))
   \end{displaymath}
@@ -171,10 +171,10 @@ Danach bestimmen wir $\phi(N)$. Das besondere hierbei ist, dass $N$ aus
 2 Primzahlen besteht. Für Primzahlen gilt: $ \phi(p) = p-1$. Somit gilt für
 unser Beispiel:
 \begin{displaymath}
-\phi(N) = \phi(p) * \phi(q) = (p-1)*(q-1) = 4*6 = 24 
+\phi(N) = \phi(p) * \phi(q) = (p-1)*(q-1) = 4*6 = 24
 \end{displaymath}
 Jetzt brauchen wir unser $e$. $e$ muss teilerfremd zu $\phi(N)$ sein. Wie im
-Grundlagenteil erläutert, gilt für $e$ folgende Regel: 
+Grundlagenteil erläutert, gilt für $e$ folgende Regel:
 \begin{displaymath}
 e \in \mathbb{N} \ | \ ggT(e,N) = 1 \ \ \gets \  \ 1<e<\phi(N)
 \end{displaymath}
@@ -215,7 +215,7 @@ dieser Stelle können 2 Besonderheiten auftreten.
   um keinen Rechenfehler handelt erkennt man später daran, dass die
   Zwischenergebnisse vor dem Modulo-Rechnen 2 unterschiedliche Zahlen sind.
   \item Es könnte ebenso der Fall auftreten, dass das x nach dem
-  erweitereten euklidischen Algorithmus negativ ist. In diesem Fall darf man 
+  erweitereten euklidischen Algorithmus negativ ist. In diesem Fall darf man
   den ermittelten Wert nocheinmal mod(N) rechnen, z.B. $-9 = 31 \ mod
   (40)$.\footnote{Vgl.
   http://www.onlinemathe.de/forum/RSA-Was-wenn-inverser-Schluessel-negativ-ist}
@@ -252,7 +252,7 @@ Rechenweg:
 Verschlüsselt ergibt der Klartext $T$ nun den Wert $V = 12$. Unser Buchstabe
 "`C"' symbolisiert für einen Außenstehenden theoretisch nun den
 Buchstaben "`L"'.
-\newline\newline 
+\newline\newline
 Um zu zeigen, dass der private Schlüssel trotz gleichem $d$ und $e$ stimmt,
 können wir den Geheimtext wieder entschlüsseln.
 Die Formel dazu lautet $T = V^d \ mod(N)$.
@@ -288,7 +288,7 @@ Nachdem die mathematischen Aspekte des RSA-Verfahrens aufgezeigt worden sind,
 stellt sich natürlich die Frage, wie standhaft denn das Konzept gegenüber
 Angriffen ist. Grundsätzlich gilt natürlich: "`Je länger die Schlüssellänge,
 desto sicherer das gesamte Verfahren"`. Gängige Werte für das RSA-Verfahren sind
-1024 oder 2048 Bit.\footnote{Vgl. \citet{KryptoIX} - S. 176} Generell kann man
+1024 oder 2048 Bit.\footnote{Vgl. \cite{KryptoIX} - S. 176} Generell kann man
 sagen, dass das RSA Verfahren bei gewissenhafter und richtiger Implementierung
 ein sehr sicheres Verfahren darstellt und bestens für Verschlüsselungen geeignet
 ist. Die Kehrseite der Medallie ist die Tatsache, dass die besten Verfahren auch
@@ -300,7 +300,7 @@ Die vollständige Schlüsselsuche fällt unter die Kategorie der
 ein Angreifer, sich einen Signaturprüfschlüssel zu generieren, so dass ein
 gegebenes Nachricht/Signatur-Paar eines anderen Benutzers auch bei der
 Verifikation mit seinem Signaturprüfschlüssel \textit{gültig}
-ausgibt."'\footnote{siehe \citet{SpringerKey} - S. 389} Bezogen auf RSA hieße
+ausgibt."'\footnote{siehe \cite{SpringerKey} - S. 389} Bezogen auf RSA hieße
 das, dass der Angreifer so lange einen Schlüssel erzeugen würde, bis aus einem
 Geheimtext ein (logischer) Klartext werden würde. Betrachten wir den Aufwand
 $O(n/2)$ dieser Suche bei einer Schlüssellänge von 256-Bit, müsste der Angreifer
@@ -308,7 +308,7 @@ $O(n/2)$ dieser Suche bei einer Schlüssellänge von 256-Bit, müsste der Angrei
 enstpricht ungefähr 10$^{76}$ verschiedenen Schlüsseln - zum Vergleich das
 Universum ist 10$^{18}$ Sekunden alt. Für einen "`überschaubaren"' Zeitraum zur
 Findung der Lösung, müsste man ungefähr 10$^{58}$ verschiedene Schlüssel
-ausprobieren.\footnote{Vgl. \citet{KryptoIX} - S. 177}
+ausprobieren.\footnote{Vgl. \cite{KryptoIX} - S. 177}
 \subsection{Faktorisierungsproblem}
 Um den Aufwand der vollständigen Schlüsselsuche zu reduzieren, wäre es
 sinnvoller die verwendeten Primzahlen $p$ und $q$ herauszufiltern. Aus Ihnen
@@ -322,10 +322,10 @@ annehmbarer Zeit zu lösen.
 Der Weltrekord einer faktorisierten RSA-Primzahl liegt derzeit bei einem 768-Bit
 Schlüssel, dass sind ungefähr 232 Dezimalstellen - die Zeitdauer dafür
 entsprach knapp 2,5 Jahre.
-(Zum Vergleich, ein Faktor des RSA-768 lautet: \newline 
+(Zum Vergleich, ein Faktor des RSA-768 lautet: \newline
 $347807169895689878604416984821269081770479498371376856891
 2431388982883793878$\newline$002287614711652531743087737814467999489$)\footnote{siehe
-\citet{768RSA} - S. 13}
+\cite{768RSA} - S. 13}
 Im Umkehrschluss bedeutet das, dass ein 1024-Bit Schlüssel die minimale
 Schlüssellänge heutzutage sein sollte und man damit aber noch ausreichend
 geschützt ist.
@@ -334,7 +334,7 @@ Kurioser Weise schlug der RSA-Miterfinder Adi Shamir 1999 auf einer
 Eurocrypt-Konferenz in Prag ein Konzept für eine Maschine dar, welche speziell
 auf das Problem der Faktorisierung ausgerichtet sein sollte -
 TWINKLE (The Weizmann Insitute Key Locating Engine).\footnote{Vgl.
-\citet{TWINKLE}} Das besondere an dieser Maschine ist ihre Bauweise, die
+\cite{TWINKLE}} Das besondere an dieser Maschine ist ihre Bauweise, die
 keinesfalls einem Computer sondern einen elektronisch, optischen Apparat
 ähnelte.
 2003 stellte Shamir erneut eine solche Maschine mit einem Kollegen vor - den
@@ -350,20 +350,20 @@ gewählten Schlüssellänge so enorm aufwendig sie wieder rückgängig zu machen
 dass mit dem heutigen Stand der Technik es nicht in annehmbarer Zeit geknackt
 werden kann. Ein ernstzunehmendes Problem wird es erst, sobald ein neues,
 effizientes mathematisches Verfahren zur Faktorisierung bekannt wird. Dann muss
-sich aber nicht nur das RSA um seine Sicherheit fürchten. 
+sich aber nicht nur das RSA um seine Sicherheit fürchten.
 Als sichere Schlüssellänge gelten Werte ab 1024 Bit. Wer lieber zu viel als zu
 wenig Sicherheit bei seiner Verschlüsselung anstreben möchte, der darf beruhigt
 zur 4096 Bit-Variante greifen.
 \section{Riemannsche Vermutung}
 Ein großes Risiko für das RSA-Verfahren bietet der Beweis der \emph{Riemannschen
 Hyptohese/Vermutung}.
-Genau wie beim Faktorisieren, gestaltet sich die Suche nach neuen Primzahlen ebenso als ein 
+Genau wie beim Faktorisieren, gestaltet sich die Suche nach neuen Primzahlen ebenso als ein
 schwieriges Unterfangen, welches enorme Rechenkapazitäten in Anspruch nimmt.
 Durch die Unregelmäßigkeit der Primzahlen, muss jede einzelne Zahl genauestens betrachtet
 und geprüft werden, ob sie eine Primzahl darstellt. Ein System hinter der
-Verteilung von Primzahlen scheint es nicht zu geben. Bislang gibt es nur eine Vermutung/Hypothese, welche von Bernhard Riemann niedergeschrieben 
+Verteilung von Primzahlen scheint es nicht zu geben. Bislang gibt es nur eine Vermutung/Hypothese, welche von Bernhard Riemann niedergeschrieben
 worden ist. Er beschäftigte sich ausführlich mit der Verteilung von Primzahlen
-und stieß auf eine interessante Entdeckung. 
+und stieß auf eine interessante Entdeckung.
 Er knüpfte bei seinen Forschungen an die Entdeckungen von Euler 100 Jahre zuvor
 an, der mit der Formel
 \begin{displaymath}
@@ -372,7 +372,7 @@ an, der mit der Formel
 \end{displaymath}
 zum ersten Mal bewies, dass Primzahlen etwas mit den Strukturen von
 naturwissenschaftlichen Objekten zu tun hat. Riemann schreib diese Funktion ein
-bisschen um und bildete daraus die Zeta-Funktion. 
+bisschen um und bildete daraus die Zeta-Funktion.
 \begin{displaymath}
 \zeta(2)=\sum_{n=1}^{\infty} \frac{1}{n^2}
 \end{displaymath}
@@ -382,9 +382,9 @@ als Rechenzahl einbezogen worden ist. Noch erstaunlicher ist es, dass diese Null
 einzigen Geraden liegen. Die Riemannsche Vermutung legt als die These fest, dass
 alle existierenden Primzahlen auf dieser Geraden liegen müssten.\footnote{Vgl.
   https://www.youtube.com/watch?v=CaFoSTxkIvY - ab 12:15}
-\newline 
-Die Riemannsche Vermutung wurde auf die Liste der Millenium-Probleme gesetzt und zahlreiche 
-namenhaften Wissenschaftler haben schon versucht diese These zu beweisen. Bis jetzt ist es jedoch 
+\newline
+Die Riemannsche Vermutung wurde auf die Liste der Millenium-Probleme gesetzt und zahlreiche
+namenhaften Wissenschaftler haben schon versucht diese These zu beweisen. Bis jetzt ist es jedoch
 noch keinem Gelungen. Sollte die Hypothese jemals beweisen werden, werden
 Primzahlen als Verschlüsselungsmethode nie wieder Verwendung finden dürfen. Die
 Kryptographie müsste dann einen Rundumschlag erleben.

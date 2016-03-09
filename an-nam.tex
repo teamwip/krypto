@@ -1,2 +1,533 @@
+%!TEX root = main.tex
 \author{Autor: An-Nam Pham}
 \chapter{Mathematische Grundlagen}
+
+\newshadetheorem{Einweg}{Definition}
+\newshadetheorem{Euler}{Definition}
+\newshadetheorem{Faktorisierung}{Beweis}
+%https://de.sharelatex.com/learn/Theorems_and_proofs
+
+Alle Kryptosysteme haben eine mathematische Grundlage. Das asymmetrische Kryptosystem ist hier keine Ausnahme.
+Deswegen soll in diesem Kapitel auf die Grundlagen der Mathematik hinter den asymmetrischen Kryptosystemen und vor allem dem RSA-Kryptosystem eingegangen werden.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Restklassenringe}
+\label{sec:Restklassenringe}
+% Restklassenringe bilden die Basis für diverse Kryptosysteme (z.B. RSA).
+Ein Restklassenring ist eine algebraische Struktur mit Restklassen\footnote{Die Restklasse einer Zahl $a~mod(n)$ ist die Menge aller Zahlen, bei der die Division von $a$ durch $n$ denselben Rest haben wir $a$.} als Menge.
+In einem Restklassenring lässt es sich so rechnen, wie man z.B. mit Uhrzeiten rechnen würde.\\
+\\
+\textbf{Beispiel}\\
+Man kann Uhrzeiten addieren. Zum Beispiel:
+\begin{equation*}
+13~Uhr + 2~Stunden = 15~Uhr
+\end{equation*}
+Das Ergebnis kann aber nicht über 24 Uhr liegen:
+\begin{equation*}
+22~Uhr + 5~Stunden = 27~Uhr
+\end{equation*}
+Wird allerdings definiert, dass alle Werte Elemente der Restklasse $24\mathbb{Z}$ sind, existieren genau 24 Elemente. Nämlich die Zahlen 0 bis 23. Wenn man noch Addition und Multiplikation definiert, erhält man den Restklassenring $\mathbb{Z}/24\mathbb{Z}$, oder anders geschrieben: $\mathbb{Z}_{24}$.
+In diesem Restklassenring sieht die vorherige Rechnung nun wie folgt aus:
+\begin{equation*}
+22~Uhr + 5~Stunden = 3~Uhr\quad in~\mathbb{Z}_{24}
+\end{equation*}
+oder mathematisch:
+\begin{equation*}
+22+5 \equiv 3~(mod~24)
+\end{equation*}
+In RSA wird zum Teil in einem Restklassenring gearbeitet, um die Voraussetzung für eine Einswegsfunktion zu schaffen (siehe Nachtrag auf Seite \pageref{sec:Nachtrag})\footnote{vgl. \cite{restklassenring}}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Einwegfunktionen}
+\label{sec:Einwegfunktionen}
+Eine Einwegfunktion \textit{(engl. one-way-function)} ist die Grundlage aller asymmetrischen Kryptosysteme.
+
+\begin{Einweg}[Einwegfunktion]
+\label{Def_Einweg}
+Eine Einwegfunktion ist gegeben,\\
+wenn für eine injektive Funktion \(f:X\rightarrow Y\) folgendes gilt:
+\begin{itemize}
+\item Es gibt ein effizientes Verfahren zur Bestimmung von $y=f(x)~~\forall~~x \in X $
+\item Es gibt kein effizientes Verfahren zu Bestimmung von $x=f^{-1}(y)~~\forall~~y \in f(X)$
+\end{itemize}
+\end{Einweg} 
+Auf gut Deutsch sagt die Definition \ref{Def_Einweg}, dass eine Einwegfunktion einfach zu berechnen ist, die Umkehrung aber praktisch nicht durchführbar ist.
+
+% Für die Präsi kann man auch noch folgende Beispiele bringen:
+% Sich ein Bein brechen, Zahnpasta aus der Tube drücken, Brief zerreißen
+
+\begin{description}
+\item[Beispiel 1]\hfill \\
+$f_{Telefon}:Name\rightarrow Telefonnummer$\\
+Ein einfaches Beispiel für eine Einwegfunktion ist ein klassisches Telefonbuch. Hier kann man schnell zu jedem eingetragenen Namen eine Telefonnummer finden. Will man allerdings zu einer gegebenen Telefonnummer einen Namen finden, ist dies sehr aufwendig.
+\item[Beispiel 2]\hfill \\
+$f_{Stradivari}:Konstruktionsanweisung\rightarrow Stradivari$\\
+Obwohl verschiedene Stradivari mehrfach analysiert wurden, lässt sich bis heute keine Kopie einer Violine mit einem ähnlichen Klanggefühl herstellen.
+\end{description}
+Das große Dilemma der Definition \ref{Def_Einweg} ist die erforderliche Tatsache, dass eine Einwegfunktion so schwierig umzukehren ist, dass es praktisch nicht umsetzbar ist.\\
+Wird eine Einwegfunktion in einem Kryptosystem eingesetzt, kann die verschlüsselte Nachricht zwar nicht von Unbefugten geknackt werden, aber auch der rechtmäßige Empfänger wird nicht in der Lage sein, die Nachricht zu entschlüsseln.
+\\
+Es wird also eine Einwegfunktion mit Falltür \textit{(engl. trap-door one-way-funktion)} benötigt.
+
+\begin{Einweg}[Einwegfunktion mit Falltür]
+\label{Def_Einweg_Backdoor}
+Eine Einwegfunktion mit Falltür ist gegeben,\\
+wenn für eine injektive Funktion \(f:X\rightarrow Y\) folgendes gilt:
+\begin{itemize}
+\item Es gibt ein effizientes Verfahren $A$ zur Bestimmung von $y=f(x)~~\forall~~x \in X $
+\item Es gibt ein effizientes Verfahren $B$ zu Bestimmung von $x=f^{-1}(y)~~\forall~~y \in f(X)$
+\item Die Herleitung von $B$ aus $A$ ist  ohne eine geheimzuhaltene\\Falltürinformation sehr schwer bzw. nicht möglich.
+\end{itemize}
+\end{Einweg}
+\hfill
+\begin{description}
+\item[Beispiel für eine Einwegfunktion mit Falltür]\hfill \\
+Wenn man eine Tür ins Schloss fallen lässt, lässt sich diese Tür nur noch mit einem passenden Schlüssel öffnen.
+\end{description}
+Für das RSA-Kryptosystem wird eine solche Einwegfunktion mit Falltür verwendet. Die Einwegfunktion basiert auf dem Faktorisierungsproblem und die Falltür ist die Bestimmung des privaten Schlüssels mit Hilfe des öffentlichen Schlüssels. Die geheimzuhaltende Falltürinformation sind die beiden Primfaktoren der Zahl, die in beiden Schlüsseln vorhanden sind\footnote{vgl. \cite{einwegfunktion}}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Faktorisierungsproblem}
+\label{sec:Faktorisierungsproblem}
+Für die Schlüsselgenerierung in RSA müssen zwei Primzahlen gefunden werden. Mit Hilfe eines Primzahltests (z.B. Miller-Rabin-Test) kann man prüfen, ob es sich bei den zwei Zahlen um eine Primzahl handelt.\\
+Das Multiplizieren von $p$ und $q$ (mit $p\perp q$) um an $p\cdot q=m$ ranzukommen ist leicht. Aber um aus $m$ an $p$ und $q$ ranzukommen, muss eine Faktorisierung in Form einer Primfaktorzerlegung an $m$ durchgeführt werden. Da $m$ ein Produkt zweier Primzahlen ist, wird die Primfaktorzerlegung folgendes Ergebnis liefern:
+\begin{equation*}
+\label{formel:m_aus_Primzahlen}
+m=p\cdot q
+\end{equation*}
+Das Problem bei einer Primfaktorzerlegung (bzw. Faktorisierung) ist, dass bisher kein effizientes Verfahren bekannt ist, um die Primfaktorzerlegung einer beliebigen Zahl zu erhalten.\\
+Im Folgenden werden zwei bekanntes Verfahren vorgestellt, um eine Primfaktorzerlegung durchzuführen:
+\\
+\\
+\underline{Primfaktorzerlegung durch Probedivision}\\
+Bei der Probedvision handelt es sich um das einfachste Verfahren zur Zerlegung einer Zahl $m$ in seine Primfaktoren. Bei diesem Verfahren wird wiederholt \glqq probiert\grqq, ob $m$ durch Primzahlen teilbar ist.\\
+Folgendes Beispiel mit $x=126$ zeigt das Vorgehen bei der Probedivision:
+\\
+\\
+% \textbf{Schritt 1:} \\
+% Die nächst größere Quadratzahl $q$ zu $m=126$ finden:
+% \begin{align*}
+% q&=\Big\lceil \sqrt{m}\Big\rceil^{2}=a^{2}\\
+% \Rightarrow q&=\Big\lceil \sqrt{126}\Big\rceil^{2}=12^{2}=144
+% \end{align*} 
+% \\
+% Die Zahl $a=12$ gibt an, welche Primzahlen ausprobiert werden müssen, um $m$ in ihre Primfaktoren zu zerlegen. Es sind alle Primzahlen $P \in \mathbb{P}$, für die $2\leqq p \leqq a$ gilt:\\
+% \begin{equation*}
+% P=\{2,3,5,7,11\}
+% \end{equation*}
+\textbf{Schritt 1:} \\
+% Zuerst wird $m$ so oft durch die \glqq erste\grqq Primzahl 2 geteilt, bis dies nicht mehr möglich ist. Dann wird $m$ so oft durch die \glqq nächst größere\grqq Primzahl 3 geteilt, bis dies nicht mehr möglich ist. Darauf folgen die 5, 7, usw., bis die zu teilende Zahl eine Primzahl ist. \\
+% \\
+Zuerst wird $x$ überprüft, ob sie eine Primzahl ist (z.B. mit dem Miller-Rabin Test):
+\begin{center}
+$x=126$ ist eine gerade Zahl. Also kann sie keine Primzahl sein.
+\end{center}
+Da $x$ keine Primzahl ist, kann sie faktorisiert werden. Zuerst wird sie so oft mit der \glqq ersten\grqq~Primzahl 2 geteilt, bis es nicht mehr geht:
+\begin{equation*}
+126/2=63\\
+\end{equation*}
+Die 63 ist nicht mehr durch 2 teilbar. Also wird versucht, die Zahl durch die \glqq nächst größere\grqq~Primzahl 3 zu teilen und so lange zu wiederholen, bis es nicht mehr geht:
+\begin{align*}
+63/3&=21\\
+21/3&=7
+\end{align*}
+Da die 7 eine Primzahl ist\footnote{Bei großen Zahlen kann am Ende auch eine sehr große Zahl stehen. Bei Unsicherheit sollte diese Zahl z.B. mit dem Miller-Rabin Test geprüft werden, ob es sich wirklich um eine Primzahl handelt.}, ist sie der letzte Primfaktor von $x=126$. Insgesamt wurde $m$ einmal durch 2, zweimal durch 3 und einmal durch 7 geteilt. Daraus folgt:\\
+\begin{equation*}
+126=2\cdot3\cdot3\cdot7=2\cdot3^{2}\cdot7\\
+\end{equation*}
+Damit ist die Primfaktorzerlegung durch Probedivision abgeschlossen\footnote{vgl. \cite{faktorisierung}}.\\
+Die Probedivision stößt allerdings schnell an ihre Grenzen, wenn $x$ ein Produkt aus zwei großen Primzahlen $p$ und $q$ ist, da jede Primzahl von 2 bis $q$ (im Fall dass $p>q)$ durchprobiert werden muss. Eine etwas effektivere Methode für diesen Fall bietet die Faktorisierungsmethode von Fermat.\\ 
+\\
+\underline{Primfaktorzerlegung mit der Faktorisierungsmethode von Fermat}\\
+Die Faktorisierungsmethode von Fermat beruht darauf, dass jede ungeradene Zahl $m$ als Differenz zweier Quadratzahlen dargestellt werden kann.
+
+\begin{Faktorisierung}[Jede ungeradene ganze Zahl ist eine Differenz zweier Quadratzahlen]
+Jede ungerade ganze Zahl $m$ lässt sich mit einer geeigneten geraden Zahl $k$ als\\
+folgendes schreiben:
+\begin{equation*}
+m=2\cdot k+1
+\end{equation*}
+\textbf{\underline{Behauptung:}}\\
+Die Zahl $m$ lässt sich auch als Differenz zweier aufeinanderfolgenden Quadratzahlen\\ schreiben:
+\begin{equation*}
+m=(k+1)^{2}-k^{2}
+\end{equation*}
+\textbf{\underline{Beweis der Behauptung:}}
+\begin{align*}
+m&=(k+1)^{2}-k^{2} = k^{2}+2\cdot k+1-k^{2}\\
+&=2\cdot k+1
+\end{align*}
+Hiermit ist bewiesen, dass jede ungeradene ganze Zahl $m$ als Differenz zweier Quadratzahlen geschrieben werden kann:
+\begin{align*}
+m=2\cdot k+1=(k+1)^{2}-k^{2} \qquad q.e.d
+\end{align*}
+\end{Faktorisierung}
+Ist $m$ ein Produkt zweier Primzahlen lässt sie sich in zwei Primzahlen faktorisieren:
+\begin{equation*}
+m=p\cdot q
+\end{equation*}
+Dank der 3. Binomischen Formel lässt sich folgendes definieren:
+\begin{align*}
+\label{eq:3_bin_formel_Definition}
+p&:=(a+b)\\
+q&:=(a-b)\\
+m=p\cdot q&=(a+b)\cdot(a-b)\\
+\Rightarrow m&=a^{2}-b^{2}
+\end{align*}
+Die Zahl $m$ ist nun die Differenz zweier Quadratzahlen. Es müssen nun $a$ und $b$ bestimmt werden. Sind diese beiden Zahlen bestimmt, lässt sich daraus $p$ und $q$ ableiten und man hätte $m$ faktorisiert.\\
+Die folgende Beispielrechnung erläutert nun die Faktorisierungsmethode von Fermat:\\
+\\
+\underline{Beispiel:}\\
+Es wird angenommen, dass $m$ ein Produkt der Primzahlen $p=727$ und $q=619$ ist.\\
+Daraus folgt:
+\begin{equation*}
+m=450013
+\end{equation*}
+Dank der 3. Binomischen Formel (siehe vorheriger Abschnitt) gilt folgendes:
+\begin{align*}
+&m=a^{2}-b^{2}\\
+\Leftrightarrow~&a^{2}-m=b^{2} 
+\end{align*}
+Nun wird die Faktorisierungsmethode von Fermat ausgeführt.\\
+\\
+\textbf{Schritt 1:} Bestimmen der nächst größeren Quadratzahl $Q$ von $m$:
+\begin{align*}
+Q&=\Big\lceil \sqrt{m}\Big\rceil^{2}=a^{2}\\
+\Rightarrow Q&=\Big\lceil \sqrt{450013}\Big\rceil^{2}=671^{2}=450241
+\end{align*}
+\textbf{Schritt 2:} Differenz prüfen:\\
+Wenn die Differenz $d=a^{2}-m$ eine Quadratzahl $b^{2}$ ist, lassen sich daraus die Faktoren $p$ und $q$ von $m$ bestimmen. Ist $d$ keine Quadratzahl, wird der Schritt mit der nächst höheren Quadratzahl durchgeführt:
+\begin{align*}
+% (a &=a)   &:\qquad &d=a^{2} &-n      &=b^{2}?\quad &|~&Keine~Quadratzahl\\
+% (a &=671) &:\qquad &d=450241&-450013 &=228\quad &|~&Keine~Quadratzahl\\
+% (a &=672) &:\qquad &d=451584&-450013 &=1571\quad &|~&Keine~Quadratzahl\\
+% (a &=673) &:\qquad &d=452929&-450013 &=2916\quad &|~&Quadratzahl
+(a &=a):   &  d &= a^{2}  - m       & &=b^{2}~? & &|~Quadratzahl?\\
+\midrule
+(a &=671): &  d &= 450241 - 450013  & &=228     & &|~Keine~Quadratzahl\\
+(a &=672): &  d &= 451584 - 450013  & &=1571    & &|~Keine~Quadratzahl\\
+(a &=673): &  d &= 452929 - 450013  & &=2916    & &|~Quadratzahl
+\end{align*}
+Nun sind $a^{2}$ und $b^{2}$ bestimmt worden:
+\begin{align*}
+a^{2} &= 452929 =673^{2}\\
+b^{2} &= 2916 =54^{2}
+\end{align*}
+\textbf{Schritt 3:} Die (Prim-)Faktoren $p$ und $q$ bestimmen:
+\begin{align*}
+m &= a^{2}-b^{2} = (a+b) \cdot (a-b)\\
+  &= 673^{2}-54^{2} = (673+54) \cdot (673-54)\\
+  &= 727 \cdot 619\\
+\Rightarrow m &=p \cdot q = 727 \cdot 619
+\end{align*}
+Damit ist die Primfaktorzerlegung durch die Faktorisierungsmethode von Fermat abgeschlossen\footnote{vgl. \cite{faktorisierung_fermat}}.\\
+Seine Stärke kann diese Methode ausspielen, wenn $p$ und $q$ sich nicht stark voneinander unterscheiden (nur eine kleine Differenz haben) und somit nahe $\sqrt{m}$ liegen.\\
+\\
+\underline{Zur Verdeutlichung:}
+\begin{itemize}
+\item Je kleiner die Differenz von $p$ und $q$ ist, desto kleiner ist $b^{2}$ \quad \textit{(siehe \underline{Schritt 3})}
+\item Je kleiner $b^{2}$ ist, desto kleiner ist die Differenz $d=a^{2}-m$ \quad \textit{(siehe \underline{Schritt 2})}
+\item Je kleiner die Differenz $d$ ist, desto weniger Quadratzahlen $q$ bzw. $a^{2}$ müssen \glqq durchprobiert\grqq~werden
+\item Je weniger Quadratzahlen ausprobiert werden müssen, desto schneller kommt diese Faktorisierungsmethode zum Ziel
+\end{itemize}  
+\textbf{Zusammenfassend: Erkenntnisse aus den beiden Verfahren zur Primfaktorzerlegung}\\
+Anhand der Primfaktorzerlegung durch Probedivision lässt sich erkennen, dass es für die Auswahl der zwei Primzahlen $p$ und $q$ zur Schlüsselgenerierung in RSA sehr wichtig ist, hohe Zahlen\footnote{Die Literatur empfiehlt Primzahlen in der Größenordnung von ca. $10^{200}$} zu nehmen. Ansonsten lässt sich das Produkt der zwei Primzahlen sehr schnell durch Probedivision faktorisieren, da nicht so viele Primzahlen \glqq durchprobiert\grqq~werden müssen.\\
+\\
+Die Faktorisierungsmethode von Fermat liefert ebenfalls eine wichtige Erkenntnis für die Auswahl der Primzahlen zur Schlüsselgenerierung:\\
+Die beiden Primzahlen müssen sich stark voneinander unterscheiden (eine große Differenz haben), um nicht leicht faktorisiert werden zu können, da sie ansonsten zu nahe an $\sqrt{m}$ liegen.
+Liegen beide Primzahlen zu nahe an $\sqrt{m}$, kann $m$ sehr schnell durch die Faktorisierungsmethode von Fermat faktorisiert werden.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eulersche Phi-Funktion}
+\label{sec:Euler_Phi_Funktion}
+\begin{Euler}[Eulersche $\varphi$-Funktion]
+\label{def_Eulerfunktion}
+Die Eulersche Phi-Funktion (auch Eulersche $\varphi$-Funktion oder Eulersche Funktion) gibt die Anzahl aller Zahlen $a \in \mathbb{N}$ an, die zu $n \in \mathbb{N}$ teilerfremd und nicht größer als $n$ sind.
+\begin{equation*}
+\varphi(n):=\Big| \{a \in \mathbb{N}\} \big|~ggT(a,n)=1 \land 1 \le a \le n \} \Big|
+\end{equation*}
+\end{Euler}
+Zwei natürliche Zahlen $a$ und $n$ sind teilerfremd, wenn der größte gemeinsame Teiler der beiden Zahlen die 1 ist ($ggT(a,n)=1$) oder wenn beide Zahlen keinen gemeinsamen Primfaktor haben.\\
+\textbf{Als Beispiel}\\
+Die Zahl $n=6$ hat zwei Zahlen, die die in der Definition genannten Bedingungen erfüllen. Nämlich $a_1=1$ und $a_2=5$:
+\begin{itemize}
+\item \textbf{Für} $\mathbf{a_1=1}$\textbf{:} Die Bedingungen $ggT(1,6)=1$ und $1\le1\le6$ treffen zu
+\item \textbf{Für} $\mathbf{a_2=5}$\textbf{:} Die Bedingungen $ggT(5,6)=1$ und $1\le5\le6$ treffen zu
+\end{itemize}
+Demnach sind $a_1$ und $a_2$ zu 6 teilerfremd und auch nicht größer als 6. Daraus folgt:
+\begin{equation*}
+\varphi(6)=2
+\end{equation*}
+\textbf{Berechnung}\\
+Bei asymmetrischen Kryptosystemen wird die $\varphi$-Funktion nur auf Primzahlen angewendet. Da eine Primzahl $p$ nur durch sich selbst und die 1 teilbar ist, sind alle Zahlen von 1 bis $(p-1)$ teilerfremd zu $p$. Daher lässt sich die $\varphi$-Funktion einer Primzahl wie folgt berechnen:
+\begin{equation*}
+\varphi(p)=p-1
+\end{equation*}
+Da die $\varphi$-Funktion eine multiplikative\footnote{Eine zahlentheoretische Funktion heißt \textit{multiplikativ}, wenn für teilerfremde Zahlen $a$ und $b$ stets\\$f(ab)=f(a)\cdot f(b)$ gilt.} Funktion ist, gilt für zwei Primzahlen $p$ und $q$ folgendes:
+\begin{equation*}
+\varphi(p\cdot q)=\varphi(p)\cdot \varphi(q)=(p-1)\cdot(q-1)
+\end{equation*}
+\underline{Beispiel für $\varphi(15)$:}\\
+$\varphi(15)=\varphi(5\cdot3)=\varphi(5)\cdot\varphi(3)=(5-1)\cdot(3-1)=8$
+\\
+\\
+Eine wichtige Anwendung findet die $\varphi$-Funktion in RSA bei der Generierung des Public- und Private Keys\footnote{vgl. \cite{euler_phi}}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Satz von Euler-Fermat}
+% \label{sec:Fermat_Euler}
+% Der Satz von Euler-Fermat sagt folgendes aus:
+% \begin{equation*}
+% a^{\varphi(n)} \equiv 1~(mod~n)
+% \end{equation*}
+% Dieser Satz wird benötigt, um zu beweisen, dass RSA funktioniert.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Moderner Euklidischer Algorithmus}
+\label{sec:Euklid_Algorithm}
+Der moderne Euklidische Algorithmus (\textit{im Folgenden vereinfacht als Euklidischer Algorithmus bezeichnet}) spielt beim RSA-Kryptosystem eine wichtige Rolle, da mit ihm der $ggT$ zweier Zahlen bestimmt werden kann. Mit ihm lässt sich also auch prüfen, ob eine ausgesuchte Zahl zu einer anderen Zahl teilerfremd ist. Außerdem ist der Euklidischer Algorithmus die Grundlage des erweiterten Euklidischen Algorithmus, der zum Berechnen eines multiplikativen Inverse einer Zahl in einem Restklassenring verwendet wird.\\
+\\
+\textbf{Funktionsweise des Euklidischen Algorithmus}\\
+Der euklidische Algorithmus basiert auf der Division mit Rest. In jedem Schritt des Algorithmus wird eine solche Division ausgeführt.
+Soll also der $ggT$ von zwei Zahlen $a$ und $b$ bestimmt werden, wird wie folgt vorgegangen:\\
+Der Algorithmus beginnt mit einer Division von  $a\div r_{0}$ mit $r_1$ als Rest und $b=r_{0}$:
+\begin{equation*}
+a=q_1\cdot r_0 + r_1
+\end{equation*}
+In jedem weiteren Schritt wird mit dem Divisor und dem Rest des vorherigen Schritts wieder eine Division mit Rest durchgeführt. Das wird so lange gemacht, bis der Rest Null ist, also die Division aufgegangen ist:
+\begin{align*}
+r_0 &= q_2\cdot r_1 + r_2\\
+r_1 &= q_3\cdot r_2 + r_3\\
+&\vdots\\
+r_{n-1} &= q_{n+1}\cdot r_n + 0
+\end{align*}
+Das $r_n$ der letzten Division ist der größte gemeinsame Teiler\footnote{vgl. \cite{euklid}}:
+\begin{equation*}
+ggT(a,b)=r_n
+\end{equation*}
+\underline{Beispiel:}\\
+Ein Beispiel für den Euklidischen Algorithmus wird im Kapitel (\textit{\nameref{sec:Erweitert_Euklid}} auf Seite \pageref{euklid_beispiel}) vorgestellt.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Multiplikatives Inverse im Restklassenring}
+\label{sec:Inverse_Restklassenring}
+Die multiplikativ inversen Elemente im Restklassenring sind sozusagen der Schlüssel zum Erfolg des RSA-Verfahren (siehe Kapitel \textit{\nameref{sec:Beweis}} auf Seite \pageref{sec:Beweis}).\\
+\\
+\underline{Zum Grundverständnis:}\\
+Ein Element $x^{-1}$ ist das multiplikativ inverse Element von $x$, wenn folgende Bedingung erfüllt ist:
+\begin{equation*}
+ x \cdot x^{-1}=1
+\end{equation*}\\
+\underline{In einem Restklassenring sieht das multiplikativ inverse Element wie folgt aus:}\\
+Ein Element $a^{-1} \in \mathbb{Z}_n$ ist das multiplikativ inverse Element von $a \in \mathbb{Z}_n$, wenn folgende Bedingung erfüllt ist\footnote{vgl. \cite{inverse}}:
+\begin{equation*}
+a \cdot a^{1} \equiv 1 \quad mod(n)
+\end{equation*}
+\underline{\textbf{Lemma von Bézout}}\\
+Das Lemma besagt folgendes\footnote{ \cite{bezout}}:\\
+Der $ggT(a,b)$ lässt sich als Linearkombination von $a$ und $b$ mit ganzzahligen Koeffizienten darstellen:
+\begin{equation*}
+\forall~a,b \in \mathbb{Z}~\exists~s,t \in \mathbb{Z}~|~ggT(a,b)=s\cdot a+t\cdot b
+\end{equation*}
+Beim RSA-Verfahren muss das multiplikativ inverse Element $d$ von $e~mod(\varphi(N))$ bestimmt werden. Da $e$ teilerfremd zu $\varphi(N)$ ist, ist deren $ggT(e,\varphi(N))=1$.\\
+Nach dem Lemma von Bézout gilt also folgendes:
+\begin{equation*}
+1\equiv d \cdot e + k \cdot \varphi(N) \quad mod(\varphi(N))
+\end{equation*}
+Da $d$ das multiplikativ inverse Element von $e$ ist, gilt auch folgendes:
+\begin{align*}
+d\cdot e &\equiv 1 \quad mod(\varphi(N))\\
+\Rightarrow k \cdot \varphi(N) &\equiv 0 \quad mod(\varphi(N))
+\end{align*}
+Das $k$ dient beim RSA Verfahren nur als \glqq Hilfsvariable\grqq und wird nicht weiter benötigt.\\
+Weil das Lemma von Bézout gilt, kann mit dem erweiteren euklidischen Algorithmus eine Linearkombination aus $e$ und $\varphi(N)$ dargestellt werden, womit das inverse Element $d$ bestimmt werden kann.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Erweiterter Euklidischer Algorithmus}
+\label{sec:Erweitert_Euklid}
+Wie im vorherigen Kapitel gesagt, kann der erweiterter euklidischer Algorithmus angewendet werden, um die multiplikativ inversen Elemente in einem ganzzahligen Restklassenring zu berechnen. Dies wird bei der Bestimmung des privaten Schlüssels im RSA-Kryptosystems benötigt, da es unter anderem durch das multiplikative Inverse zu einem Element des öffentlichen Schlüssels bestimmt wird.\\
+\\
+Der erweiterter euklidischer Algorithmus wird wie folgt zur Bestimmung eines multiplikativen inversen Elements angewendet:\\
+Wenn das multiplikativ inverse Element von $e~mod (\varphi(N))$ bestimmt werden soll, muss zuerst der euklidische Algorithmus an $e$ und $\varphi(N)$ angewendet werden. Dieser produziert eine Folge von Divisionen mit Rest. Anschließend kann man diese Divisionsgleichungen \glqq rückwärts lesen\grqq~und den Rest jeweils als Differenz der anderen Divisionsgleichungen darstellen. Dies wird rekursiv durchgeführt, bis man alle Divisionsgleichungen eingesetzt hat.\\
+\\
+% \underline{Beispiel zur Verdeutlichung:}\\
+% \label{euklid_beispiel}
+% Es soll das multiplikativ inverse Element $d$ von $e~mod(\varphi(N))$ mit $e=11$ und $\varphi(N)=24$ bestimmt werden. Es gilt also:
+% \begin{align*}
+% d \cdot e &\equiv 1 \quad mod(\varphi(N))\\
+% \Rightarrow d \cdot 11 &\equiv 1 \quad mod(24)
+% \end{align*}
+% Nach dem Lemma von Bézout kann dies so dargestellt werden:
+% \begin{equation*}
+% 1 \equiv d \cdot 11 + k \cdot 24 \quad mod(24)
+% \end{equation*}
+% Nun wird der euklidische Algorithmus ausgeführt:
+% \begin{align*}
+% 24 &= 2 \cdot 11 + 2\\
+% 11 &= 5 \cdot 2 + 1\\
+% 2 &= 2 \cdot 1 + 0
+% \end{align*}
+% Jetzt kann der erweiterte euklidischer Algorithmus ausgeführt werden:\\
+% Man betrachtet die vorletzte Zeile der Divisionsgleichungen. Da ist der Rest 1.\\
+% Laut Lemma von Bézout soll der Rest 1 auf der einen Seite der Gleichung stehen. Deswegen wird diese Zeile nun umgeformt:
+% \begin{align*}
+% 11 &= 5 \cdot 2 + 1\\
+% \Rightarrow 1 &= 11-5\cdot 2
+% \end{align*}
+% Nun wird \glqq rückwärts gelesen\grqq~und der Rest jeweils als Differenz der anderen Divisionsgleichungen dargestellt. Dies wird rekursiv durchgeführt, bis man alle Divisionsgleichungen eingesetzt hat:
+% \begin{align*}
+% 1 &= 11-5\cdot 2\\
+%   &= 11-5\cdot (24-2\cdot 11)\\
+%   &= 11-5\cdot 24+10\cdot 11\\
+%   &= -5\cdot24+11\cdot 11
+% \end{align*}
+% Betrachtet man nun die letzte Gleichung im Restklassenring $\mathbb{Z}_{24}$ ergibt sich folgende Gleichung:
+% \begin{equation*}
+% 1 \equiv-5\cdot24+11\cdot 11 \quad mod(24)
+% \end{equation*}
+% \centering{mit}
+% \begin{align*}
+% 0 &\equiv -5\cdot 24 \quad mod(24)\\
+% 1 &\equiv 11\cdot 11 \quad mod(24)\\
+% \end{align*}
+\underline{Beispiel zur Verdeutlichung:}\\
+\label{euklid_beispiel}
+Es soll das multiplikativ inverse Element $d$ von $e~mod(\varphi(N))$ mit $e=983$ und\\
+$\varphi(N)=986040$ bestimmt werden. Es gilt also:
+\begin{align*}
+d \cdot e &\equiv 1 \quad mod(\varphi(N))\\
+\Rightarrow d \cdot 983 &\equiv 1 \quad mod(986040)
+\end{align*}
+Nach dem Lemma von Bézout kann dies so dargestellt werden:
+\begin{equation*}
+1 \equiv d \cdot 983 + k \cdot 986040 \quad mod(24)
+\end{equation*}
+Nun wird der euklidische Algorithmus durchgeführt:
+\begin{align*}
+986040 &= 1003 \cdot 983 + 91\\
+983 &= 10 \cdot 91 + 73\\
+91 &= 1 \cdot 73 + 18\\
+73 &= 4 \cdot 18 + 1\\
+18 &= 18 \cdot 1 + 0
+\end{align*}
+Jetzt kann der erweiterte euklidischer Algorithmus ausgeführt werden:\\
+Man betrachtet die vorletzte Zeile der Divisionsgleichungen. Da ist der Rest 1.\\
+Laut Lemma von Bézout soll der Rest 1 auf der einen Seite der Gleichung stehen. Deswegen wird diese Zeile nun umgeformt:
+\begin{align*}
+73 &= 4 \cdot 18 + 1\\
+\Rightarrow 1 &= 73-4\cdot 18
+\end{align*}
+Nun wird \glqq rückwärts gelesen\grqq~und der Rest jeweils als Differenz der anderen Divisionsgleichungen dargestellt. Dies wird rekursiv durchgeführt, bis man alle Divisionsgleichungen eingesetzt hat:
+\begin{align*}
+1 &= 73-4\cdot 18\\
+  &= 73-4\cdot (91-1\cdot 73)\\
+  &= 73-4\cdot91+4\cdot73\\
+  &= -4\cdot91+5\cdot73\\
+  &= -4\cdot91+5\cdot(983-10\cdot91)\\
+  &= -4\cdot91+5\cdot983-50\cdot91\\
+  &= 5\cdot983-54\cdot91\\
+  &= 5\cdot983-54\cdot(986040-1003\cdot983)\\
+  &= 5\cdot983-54\cdot986040+54162\cdot983\\
+  &= 54167\cdot983-54\cdot986040
+\end{align*}
+Betrachtet man nun die letzte Gleichung im Restklassenring $\mathbb{Z}_{986040}$ ergibt sich folgende Gleichung:
+\begin{equation*}
+1 \equiv54167\cdot983-54\cdot 986040 \quad mod(986040)
+\end{equation*}
+mit den Produkten:
+\begin{align*}
+0 &\equiv -54\cdot 986040 \quad mod(986040)\\
+1 &\equiv 54167\cdot 983 \quad mod(986040)\\
+\end{align*}
+Da $1 \equiv 54167\cdot 983~mod(986040)$ gilt, muss $54167$ das multiplikative inverse Element von $983~mod(986040)$ und somit $d$ sein\footnote{vgl. \cite{inverse}}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Kleiner Beweis des Konzepts hinter RSA}
+\label{sec:Beweis}
+Um beweisen zu können, dass das RSA-Verfahren funktioniert, muss bewiesen werden, dass eine Nachricht $t$ mit dem Public-Key verschlüsselt und mit dem Private-Key wieder entschlüsselt werden kann und die originale Nachricht $t$ erhalten bleibt.\\
+Wird die Verschlüsselung als Funktion $V$ und die Entschlüsselung als Funktion $E$ definiert, muss demnach folgende Aussage bewiesen werden:\\
+\begin{equation*}
+E(V(t))=t
+\end{equation*}
+Beim RSA-Verfahren sehen die Funktion $V$ und $E$ so aus:
+\begin{align*}
+V(t)&=t^{e}~mod(N)=c\\
+E(c)&=c^{d}~mod(N)=t
+\end{align*}
+Da allgemein $E(V(t))=t$ bewiesen werden muss, folgt daraus, dass hier folgendes bewiesen werden muss:
+\begin{align*}
+& E(V(t))=t\\
+\Rightarrow & \Big[t^{e}~mod(N)\Big]^{d}~mod(N) \equiv t \quad mod(N)\\
+\Rightarrow & (t^{e})^{d} \equiv t \quad mod(N)
+\end{align*}
+Als Bedingung ist in RSA folgende Aussage definiert:
+\begin{align*}
+& d~\text{ist ein multiplikativ inverses Element von}~e~mod(N)\\
+\Rightarrow~ & d\cdot e \equiv 1 \quad mod(N)
+\end{align*}
+Daraus folgt:
+\begin{equation*}
+(t^{e})^{d} \equiv t^{e\cdot d} \equiv t^{1} \equiv t \quad mod(N)
+\end{equation*}
+Anhand dieses Beweises sieht man, dass die multiplikative Inversion der \glqq Schlüssel zum Erfolg\grqq~im RSA-Kryptosystem ist.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nachtrag: Restklassenring als Voraussetzung der Einwegsfunktion in RSA}
+\label{sec:Nachtrag}
+Im RSA-Verfahren wird bei der Bestimmung des Private-Key im Restklassenring gerechnet. Dafür muss das inverse Element $d$ von $e$ im Restklassenring $\mathbb{Z}_{\varphi(N)}$ bestimmt werden.\\
+\\
+\underline{Die Frage ist nun:}\\
+Warum muss das inverse Element im Restklassenring berechnet werden?
+Laut des kleinen Beweises auf Seite \pageref{sec:Beweis} funktioniert das Verschlüsseln und Entschlüsseln in RSA aufgrund der Inversion der Elemente im Public- und Private-Key:
+\begin{equation*}
+(t^{e})^{d} \equiv t^{e\cdot d} \equiv t^{1} \equiv t \quad mod(N)
+\end{equation*}
+Demnach gilt auch Folgendes (mit der Bedingung $x\cdot y=1$):
+\begin{equation*}
+(t^{x})^{y} = t^{x\cdot y} = t^{1} = t
+\end{equation*}
+Damit wäre der Public-Key=($x,N$) und der Private-Key=($y,N$).\\
+Da $y$ das inverse Element von $x$ ist, gilt:
+\begin{equation*}
+y=\frac{1}{x}
+\end{equation*}
+Daraus folgt:
+\begin{align*}
+\text{Public-Key} &=(x,N)\\
+\text{Private-Key} &=(\frac{1}{x},N)
+\end{align*}
+Wie zu sehen, ist es kein Problem, aus dem Public-Key den Private-Key zu bilden und stellt somit keine Einwegsfunktion mit Falltür dar, da der Private-Key ohne Weiteres aus dem Public-Key gebildet werden kann.\\
+\\
+Wird ein inverses Element hingegen im Restklassenring $\mathbb{Z}_{\varphi(N)}$ bestimmt\footnote{mit dem erweitertem Euklidischem Algorithmus}, wird $\varphi{(N)}$ benötigt.
+$\varphi(N)$ lässt sich allerdings nur effizient bestimmen, wenn die Primfaktoren von $N$ bekannt sind. Wie im Kapitel \nameref{sec:Faktorisierungsproblem} auf Seite \pageref{sec:Faktorisierungsproblem} erläutert, lässt sich $N$ derzeit noch nicht in vertretbarer Zeit in seine Primfaktoren zerlegen.\\
+Somit ist es für das RSA-Verfahren unabdingbar, dass multiplikativ inverse Elemente in Restklassen berechnet werden. Nur so bleibt das Verschlüsselungsverfahren eine Einwegsfunktion.

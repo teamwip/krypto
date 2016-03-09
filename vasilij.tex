@@ -2,15 +2,115 @@
 \author{Autor: Vasilij Schneidermann}
 \chapter{Hashing}
 
-Schwarze Magie.
+Die Abbildung beliebiger Eingabedaten auf Ausgabedaten fester Größe
+wird allgemein als \emph{Hashing} bezeichnet.  Das konkrete Verfahren
+ist eine \emph{Hashfunktion}, das Ergebnis des Verfahrens ist der
+\emph{Hashwert}\footnote{S.~207, Kryptographie}.
+
+Typische Anwendungsfälle für Hashing sind \emph{Hash Tables} und
+\emph{Sets} für die schnelle Suche eines Wertes in einem Wörterbuch,
+bzw.~einer Menge, aber auch Authentifizierung und die Sicherstellung
+von Integrität eines Dokuments in der Kryptographie.  Für letztere
+sind \emph{kryptographische Hashfunktionen} notwendig.
 
 \section{Hashfunktionen}
 
+Die in der Einleitung verwendete Beschreibung kann unter der Annahme,
+dass $H$ die Hashfunktion, $h$ der Hashwert und $m$ die zu hashende
+Nachricht ist folgendermaßen ausgedrückt werden:
+
+$$h = H(m)$$
+
+Anhand der Anforderung, dass der Wertebereich für $m$ unendlich groß
+ist, aber der Wertebereich für $h$ eine endliche Größe hat, kann
+geschlussfolgert werden, dass $H$ \emph{nicht} injektiv sein kann.
+Eine andere fundamentale Feststellung ist, dass durch diese Abbildung
+nicht jede Nachricht einen einzigartigen Hashwert haben kann.
+Vorkommnisse verschiedener Nachrichten mit dem gleichen Hashwert
+werden als \emph{Kollisionen} bezeichnet\footnote{S.~382,
+  IT-Sicherheit}.
+
+Kollisionen sind als solches bei nicht-kryptographischen
+Anwendungsfällen eher ein Ärgernis welches z.B.~bei einer Hash Table
+gesondert behandelt wird und zu leicht verminderter Performance führt,
+bei kryptographischen Anwendungsfällen hingegen werden Verfahren
+bevorzugt welche das Risiko von auftretenden Kollisionen
+minimieren\footnote{S.~382, IT-Sicherheit}.
+
+Zur Vermeidung von Kollisionen werden üblicherweise zwei weitere
+Anforderungen an die Hashfunktion hinzugezogen.  Einerseits sollen
+möglichst alle möglichen Hashwerte erreichbar sein oder in anderen
+Worten, die errechneten Hashwerte gleichverteilt sein, andererseits
+ist es wünschenswert dass selbst minimale Änderungen an der Nachricht
+zu vollkommen verschiedenen Hashwerten führen\footnote{S.~208,
+  Kryptographie}.
+
+\section{Beispiele nicht-kryptographischer Hashfunktionen}
+
+Falls die Hashfunktion auf einen relativ kleinen Bereich von
+Nachrichten angewandt wird, ist es möglich den Wert der Nachricht
+selbst als Hashwert zu nutzen.  Dies wird zum Beispiel für das Hashing
+vom Datentyp \emph{Integer} im OpenJDK
+genutzt\footnote{\url{http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/java/lang/Integer.java\#Integer.hashCode\%28\%29}}.
+
+Für das Hashing von Strings verwendet man etwas komplexere
+Algorithmen.  Ein solches Beispiel wurde von Daniel J.~Bernstein
+veröffentlicht\footnote{\url{https://groups.google.com/forum/\#!msg/comp.lang.c/VByoIO8GySs/2XN9iGTpgmsJ}},
+dieses kann mit wenig Aufwand in C implementiert werden\footnote{\url{http://www.cse.yorku.ca/~oz/hash.html}}:
+
+\begin{lstlisting}[language=C,basicstyle=\ttfamily\footnotesize,keywordstyle=\bfseries\color{black},captionpos=b,caption={djb2}]
+unsigned long
+hash(unsigned char *str)
+{
+    unsigned long hash = 5381;
+    int c;
+
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash;
+}
+\end{lstlisting}
+
 \section{Kryptographische Hashfunktionen}
 
-\section{Geburtstagsattacke}
+Für die Nutzung von Hashfunktionen in der Kryptographie kommen noch
+weitere Anforderungen hinzu.  Da Kollisionen bekanntermaßen
+existieren, sollte es für einen Angreifer nicht praktikabel sein eine
+Kollision zu finden\footnote{S.~209, Kryptographie}.  Dabei wird
+zwischen \emph{schwacher Kollisionsresistenz} und \emph{starker
+  Kollisionsresistenz} unterschieden.
 
-\section{Bekannte Beispiele}
+\subsection{Schwach kollisionsresistente Hashfunktionen}
+
+Gegeben sei die bisherige Definition einer Hashfunktion.  Es müssen
+zusätzlich folgende Kriterien erfüllt werden\footnote{S.~382"=383,
+  IT-Sicherheit}:
+
+\begin{enumerate}
+\item $H$ ist eine Einwegfunktion, d.h.~es ist leicht $h = H(m)$ zu
+  berechnen, aber schwer $m = H^-1(h)$ zu berechnen
+\item Ist $h = H(m)$ gegeben, ist es schwierig eine andere Nachricht
+  $m'$ zu finden für welche $h = H(m')$ gilt.
+\end{enumerate}
+
+Ist diese Eigenschaft nicht gegeben, ist es für einen Angreifer
+möglich eine Nachricht zu seinem Gunsten zu fälschen welche den
+gleichen Hashwert aufweist.
+
+\subsection{Stark kollisionsresistente Hashfunktionen}
+
+Folgende Kriterien müssen erfüllt werden\footnote{S.~385}:
+
+\begin{enumerate}
+\item $H$ muss eine schwach kollisionsresistente Hashfunktion sein
+\item Es ist schwierig $m$ und $m'$ zu finden für welche $H(m) =
+  H(m')$ gilt.
+\end{enumerate}
+
+\section{Beispiele kryptographischer Hashfunktionen}
+
+\section{Bekannte Attacken}
 
 \author{Autor: Vasilij Schneidermann}
 \chapter{Signaturen}

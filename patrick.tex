@@ -1,93 +1,98 @@
-\author{Autor: Patrick KÃ¼nzel}
+\author{Autor: Patrick KÃ¼nzl}
 \chapter{\ac{RSA}}
 \section{Motivation}
 Online-Zahlungen sind aus unserem Alltag nichtmehr wegzudenken. Aus Paypals
-letztem Quartalsbericht für das Jahr 2015 konnte man entnehmen, dass allein am
+letztem Quartalsbericht fÃ¼r das Jahr 2015 konnte man entnehmen, dass allein am
 "`Cyber Monday"' 450 Zahlungen pro Sekunde verarbeitet wurden. Das sind circa
 1,6 Millionen Geldbewegungen in einer Stunde.\footnote{Vgl. \citet{MotleyFool}}
-Für Hacker demnach ein Paradies, um Nutzerdaten oder Geldflüsse zu beeinflussen.
+FÃ¼r Hacker demnach ein Paradies, um Nutzerdaten oder GeldflÃ¼sse zu beeinflussen.
 Um dieses Szenario zu vermeiden, werden z.B. Online-Transaktionen durch
-verschiedene Verschlüsselungsverfahren (auch Kryptosysteme genannt) gesichert.
+verschiedene VerschlÃ¼sselungsverfahren (auch Kryptosysteme genannt) gesichert.
 Eines dieser Kryptosysteme ist das "`RSA-Verfahren"'. Es ist eines der
-ältesten Verfahren und in der Kategorie der \emph{asymmetrischen
-Verschlüsselungsverfahren} einzuordnen. RSA kommt z.B.
-bei E-Mail-Verschlüsselungen (OpenPGP, S/MIME) oder der Telefonie zum Einsatz.
-Dieses Kapitel beschäftigt sich mit dem Konzept/ der Funktionsweise von RSA,
-seiner mathematischen Durchführung/Besonderheiten (anhand eines Beispiels
+Ã¤ltesten Verfahren und in der Kategorie der \emph{asymmetrischen
+VerschlÃ¼sselungsverfahren} einzuordnen. RSA kommt z.B.
+bei E-Mail-VerschlÃ¼sselungen (OpenPGP, S/MIME) oder der Telefonie zum Einsatz.
+Dieses Kapitel beschÃ¤ftigt sich mit dem Konzept/ der Funktionsweise von RSA,
+seiner mathematischen DurchfÃ¼hrung/Besonderheiten (anhand eines Beispiels
 dargestellt) und der Sicherheit.
 \section{Einleitung}
 Das RSA-Verfahren wurde von Ron \textbf{R}ivest, Adi \textbf{S}hamir und Leonard \textbf{A}dlemann 
-entwickelt. 1977 entstand die erste öffentliche Version des
-Verschlüsselungsverfahrens.\footnote{Vgl.
+entwickelt. 1977 entstand die erste Ã¶ffentliche Version des
+VerschlÃ¼sselungsverfahrens.\footnote{Vgl.
 \citet{RSAWiki}} Es ist verwandt mit dem "`Rabin-Kryptosystem"'. RSA basiert auf
 2 wichtigen Grundideen:
 \begin{enumerate}
-  \item Public-Key Verschlüsselung: \newline
+  \item Public-Key VerschlÃ¼sselung: \newline
   Der Kerngedanke besteht, anders als bei den symmetrischen
-  Verschlüsselungsverfahren, daraus, 2 verschiedene Schlüssel für eine
-  Verschlüsselung zu verwenden. Die Schlüssel zum
-  Verschlüssen sind öffentlich, während der
-  Schlüssel zum Entschlüsseln privat ist und nicht weitergegeben werden darf.
+  VerschlÃ¼sselungsverfahren, daraus, 2 verschiedene SchlÃ¼ssel fÃ¼r eine
+  VerschlÃ¼sselung zu verwenden. Die SchlÃ¼ssel zum
+  VerschlÃ¼ssen sind Ã¶ffentlich, wÃ¤hrend der
+  SchlÃ¼ssel zum EntschlÃ¼sseln privat ist und nicht weitergegeben werden darf.
   Das Public-Key-Verfahren besteht formal aus drei verschiedenen Algorithmen:
   \begin{itemize}
-    \item Dem Schlüsselerzeugungsalgorithmus, welcher die Grundlage für die
-    Verschlüsselung schafft und den öffentlichen und privaten Schlüssel generiert.
-    \item Dem Verschlüsselungsalgorithmus, der mithilfe des öffentlichen
-    Schlüssels den Klartext in einen Geheimtext umwandelt. Ein Klartext kann hierbei in 
-    mehrere Geheimtexte resultieren, je nachdem welchen öffentlichen Schlüssel
-    man benutzt. $1:n$
-    \item Dem Entschlüsselungsverfahren, welcher aus dem Geheimtext mittels
-    des privaten Schlüssels den Klartext berechnet. Hier ist nur $1:1$ Zuordnung
-    möglich, das bedeutet, dass ein Geheimtext nur mit einem bestimmten privaten Schlüssel entschlüsselt werden 
-    kann.
+    \item Dem SchlÃ¼sselerzeugungsalgorithmus, welcher die Grundlage fÃ¼r die
+    VerschlÃ¼sselung schafft und den Ã¶ffentlichen und privaten SchlÃ¼ssel
+    generiert.
+    \item Dem VerschlÃ¼sselungsalgorithmus, der mithilfe des Ã¶ffentlichen
+    SchlÃ¼ssels den Klartext in einen Geheimtext umwandelt. Ein Klartext kann
+    hierbei in mehrere Geheimtexte resultieren, je nachdem welchen Ã¶ffentlichen
+    SchlÃ¼ssel man benutzt. $1:n$
+    \item Dem EntschlÃ¼sselungsverfahren, welcher aus dem Geheimtext mittels
+    des privaten SchlÃ¼ssels den Klartext berechnet. Hier ist nur $1:1$ Zuordnung
+    mÃ¶glich, das bedeutet, dass ein Geheimtext nur mit einem bestimmten privaten
+    SchlÃ¼ssel entschlÃ¼sselt werden kann.
   \end{itemize}
   \item Digitale Signatur: \newline
 	Das RSA-Verfahren kann ebenso zur Signierung von Nachrichten benutzt werden.
 	Hierbei wird die Klartext-Nachricht des Senders mit dem Private-Key
-	verschlüsselt und mit dem öffentlichen Schlüssel des Empfängers entschlüsselt. 
-	Mit dem privaten Schlüssel eine Nachricht zu "`verschlüsseln"' ist keinerlei ein
-	Widerspruch unter der Prämisse, dass $T = V$ (Klartext gleich Geheimtext) ist.
+	verschlÃ¼sselt und mit dem Ã¶ffentlichen SchlÃ¼ssel des EmpfÃ¤ngers entschlÃ¼sselt. 
+	Mit dem privaten SchlÃ¼ssel eine Nachricht zu "`verschlÃ¼sseln"' ist keinerlei
+	ein Widerspruch unter der PrÃ¤misse, dass $T = V$ (Klartext gleich Geheimtext)
+	ist.
 	\begin{displaymath}
 	E(T) = C \ \ \ \ \ \footnote{Vgl. \citet{RSAAlgorithm} - S.
   1}
 	\end{displaymath}
 	\begin{center}
-	\emph{E = Verschlüsseln (Encrypt); T = Text; C = Ciphertext (Geheimtext) }
+	\emph{E = VerschlÃ¼sseln (Encrypt); T = Text; C = Ciphertext (Geheimtext) }
 	\end{center}
-	Die Zahlen, welche die Nachricht repräsentieren unterscheiden keinen Klartext
+	Die Zahlen, welche die Nachricht reprÃ¤sentieren unterscheiden keinen Klartext
 	von einem Geheimtext. Die Interpretation des Lesers wiederum entscheidet, ob 
 	der Text einen logischen Zusammenhang ergibt (dann ist es der sogenannte
 	"`Klartext"') oder nicht (dann ist es der Geheimtext). Durch die
-	Verschlüsselung mit dem privaten Schlüssel wird nun erreicht, dass wenn der Empfänger empfangenen
-	Text entschlüsselt, er eine lesbare Nachricht zu Augen bekommt. 
+	Verschl+sselung mit dem privaten SchlÃ¼ssel wird nun erreicht, dass wenn der
+	EmpfÃ¤nger empfangenen Text entschlÃ¼sselt, er eine lesbare Nachricht zu Augen
+	bekommt.
 	\begin{displaymath}
 	D(C) = D(E(T)) = T \ \ \ \ \ \footnote{Vgl. \citet{RSAAlgorithm} - S.
   2}
 	\end{displaymath}
 	\begin{center}
-	\emph{E = Verschlüsseln (Encrypt); D = Entschlüsseln (Decrypt); T = Text; C =
+	\emph{E = VerschlÃ¼sseln (Encrypt); D = EntschlÃ¼sseln (Decrypt); T = Text; C =
 	Ciphertext (Geheimtext) }
 	\end{center}
-	Schickt der Sender gleichzeitig die selbe Nachricht unverschlüsselt zum
-	Empfänger, hat der Empfänger die Möglichkeit beide Nachrichten miteinander zu vergleichen. 
-	Sollten diese übereinstimmen, kann der Empfänger sicher sein, dass diese Nachricht von dem Inhaber des privaten Schlüssels 
-	gesendet worden ist. Die Integrität und Authentizität wird somit garantiert. 
+	Schickt der Sender gleichzeitig die selbe Nachricht unverschlÃ¼sselt zum
+	EmpfÃ¤nger, hat der EmpfÃ¤nger die MÃ¶glichkeit beide Nachrichten miteinander zu
+	vergleichen.
+	Sollten diese Ã¼bereinstimmen, kann der EmpfÃ¤nger sicher sein, dass diese
+	Nachricht von dem Inhaber des privaten SchlÃ¼ssels gesendet worden ist. Die
+	IntegritÃ¤t und AuthentizitÃ¤t wird somit garantiert.
 \end{enumerate}
 
-Das Geheimrezept für eine starke Verschlüsselung bildet ein schwieriges
+Das Geheimrezept fÃ¼r eine starke VerschlÃ¼sselung bildet ein schwieriges
 mathematisches Problem. Das bedeutet, dass man den Hinweg (Zahlen werden zu
-einem Ergebnis verarbeitet) einer Berechnung einfach durchführen kann, aber der
-Rückweg (vom Ergebnis zu den verwendeten Zahlen) sich als komplexes Problem
+einem Ergebnis verarbeitet) einer Berechnung einfach durchfÃ¼hren kann, aber der
+RÃ¼ckweg (vom Ergebnis zu den verwendeten Zahlen) sich als komplexes Problem
 darstellt (Stichwort: \emph{Einwegfunktionen}). Ein
-solches komplexes Problem wäre die Primfaktorzerlegung, auf dessen das
+solches komplexes Problem wÃ¤re die Primfaktorzerlegung, auf dessen das
 RSA-Verfahren beruht. Bei der Primfaktorzerlegung werden 2 verschiedene
 Primzahlen miteinander multipliziert, dies ist der einfache Teil. Aus dem
 Produkt beide Primzahlen zu ermitteln, gestaltet sich jedoch als
-weitaus schwieriger. Es gilt: "`Je größer der Multiplikator und der
+weitaus schwieriger. Es gilt: "`Je grÃ¶ÃŸer der Multiplikator und der
 Multiplikand, desto schwieriger die Ermittlung der einzelnen Bestandteile aus
 dem Produkt"'. In der Praxis werden Primzahlen mit mehreren 100 Dezimalstellen
 verwendet.
-\subsection{Funktionsweise}
+\section{Funktionsweise}
 Folgende Grafik veranschaulicht die Funktionsweise/den Ablauf des
 RSA-Verfahrens. \newline
 \begin{figure}[H]
@@ -96,11 +101,11 @@ RSA-Verfahrens. \newline
 Quelle: http://pajhome.org.uk/crypt/rsa/intro.html, Stand 18.02.2016}
 \end{figure}
 
-Im Folgenden werden die einzelnen Schritt ausführlich erläutert.
-  \subsection{Die Schlüsselgenerierung}
-  Bevor Dateien ver- und wieder entschlüsselt werden können, wird zunächst der
-  öffentliche und private Schlüssel kreiert. Dazu wählt man zwei
-  unterschiedlich große Primzahlen \emph{p} und \emph{q} und bildet das Produkt
+Im Folgenden werden die einzelnen Schritt ausfÃ¼hrlich erlÃ¤utert.
+  \subsection{Die SchlÃ¼sselgenerierung}
+  Bevor Dateien ver- und wieder entschlÃ¼sselt werden kÃ¶nnen, wird zunÃ¤chst der
+  Ã¶ffentliche und private SchlÃ¼ssel kreiert. Dazu wÃ¤hlt man zwei
+  unterschiedlich groÃŸe Primzahlen \emph{p} und \emph{q} und bildet das Produkt
   \emph{n}, auch bekannt als \emph{RSA-Modul}.
   \begin{displaymath}
   N = p * q
@@ -109,86 +114,87 @@ Im Folgenden werden die einzelnen Schritt ausführlich erläutert.
   \begin{displaymath}
   \phi(N) = \phi(p) * \phi(q) = (p-1) * (q-1)
   \end{displaymath}
-  Als nächsten Schritt wählt man eine Zahl $e$ mit $1<e<\phi(N)$, wobei der
-  größte gemeinsame Teiler von $e$ und $\phi(N)$ 1 sein muss. ($ggT(e,
+  Als nÃ¤chsten Schritt wÃ¤hlt man eine Zahl $e$ mit $1<e<\phi(N)$, wobei der
+  grÃ¶ÃŸte gemeinsame Teiler von $e$ und $\phi(N)$ 1 sein muss. ($ggT(e,
   \phi(N)))=1$)
-  Der öffentliche Schlüssel setzt sich nun aus den Werten $e$ und $N$ zusammen.
+  Der Ã¶ffentliche SchlÃ¼ssel setzt sich nun aus den Werten $e$ und $N$ zusammen.
   \begin{displaymath}
   KeyOeffentlich = (e,N)
   \end{displaymath} 
   $p$, $q$ und $\phi(N)$
-  dürfen nicht rausgegeben werden. \newline\newline
-  Für den privaten Schlüssel bestimmt man $d$ mit 
+  dÃ¼rfen nicht rausgegeben werden. \newline\newline
+  FÃ¼r den privaten SchlÃ¼ssel bestimmt man $d$ mit 
   \begin{displaymath}
-  e*d \equiv 1 \ mod\phi(N)
+  e*d \equiv 1 \ mod(\phi(N))
   \end{displaymath}
-  und löst die Gleichung $e*d+k*\phi(N)=1$ mit dem erweiterten euklidischen
-  Algorithmus. Das X, welches man aus der Tabelle errechnet (für eine
-  anschauliche Darstellung siehe nächsten Abschnitt) ist nun das Inverse-Element
-  von $e$. Demnach haben wir nun alle benötigten Elemente für unseren privaten
-  Schlüssel zusammen.
+  und lÃ¶st die Gleichung $e*d+k*\phi(N)\equiv 1 \ mod(\phi(N))$ mit dem
+  erweiterten euklidischen Algorithmus. Das x, welches man aus der Tabelle
+  errechnet (fÃ¼r eine anschauliche Darstellung siehe nÃ¤chsten Abschnitt) ist nun
+  das Inverse-Element von $e$. Demnach haben wir nun alle benÃ¶tigten Elemente
+  fÃ¼r unseren privaten SchlÃ¼ssel zusammen.
   \begin{displaymath}
   KeyPrivat = (d, N)
   \end{displaymath}
-  \subsection{Verschlüsselung}
-  Möchte man nun einen Klartext mit dem öffentlichen Schlüssel verschlüsseln, so
+  \subsection{VerschlÃ¼sselung}
+  MÃ¶chte man nun einen Klartext mit dem Ã¶ffentlichen SchlÃ¼ssel verschlÃ¼sseln, so
   gilt die Formel:
   \begin{displaymath}
   V = T^e \ mod(N)
   \end{displaymath}
-  \subsection{Entschlüsselung}
-  Um die Umkehrfunktion der Verschlüsselung zu bilden, ersetzen wir $e$ mit $d$
-  aus dem privaten Schlüssel. Daraus ergibt sich:
+  \subsection{EntschlÃ¼sselung}
+  Um die Umkehrfunktion der VerschlÃ¼sselung zu bilden, ersetzen wir $e$ mit $d$
+  aus dem privaten SchlÃ¼ssel. Daraus ergibt sich:
   \begin{displaymath}
   T = V^d \ mod(N)
   \end{displaymath}
 \section{Praktisches Beispiel}
 \emph{Damit man das folgende Beispiel besser nachvollziehen kann, sei kurz
-gesagt, dass Daten nicht nur durch Bitfolgen angesehen werden können, sondern auch durch
-Zahlen. Für den Computer macht es keinen Unterschied, ob er das Zeichen "`C"'
-als Bitfolge abspeichert oder den ASCII-Code von C - "`67"'. Für die
-Verschlüsselung macht es jedoch einen großen Unterschied, da man mit Zahlen
+gesagt, dass Daten nicht nur durch Bitfolgen angesehen werden kÃ¶nnen, sondern
+auch durch Zahlen. FÃ¼r den Computer macht es keinen Unterschied, ob er das Zeichen "`C"'
+als Bitfolge abspeichert oder den ASCII-Code von C - "`67"'. FÃ¼r die
+VerschlÃ¼sselung macht es jedoch einen groÃŸen Unterschied, da man mit Zahlen
 mathematisch agieren kann, im Gegensatz zu Buchstaben. Nachteil dieser
-Herangehensweise ist die Tatsache, dass sowohl Sender als auch Empfänger
-das gleiche "`Dictionary"' benötigen, um aus der Zahlenbasis wieder einen reinen
+Herangehensweise ist die Tatsache, dass sowohl Sender als auch EmpfÃ¤nger
+das gleiche "`Dictionary"' benÃ¶tigen, um aus der Zahlenbasis wieder einen reinen
 Text zu gestalten. (zum Beispiel die
-ASCII-Tabelle)}\newline\newline Nehmen wir an Alice möchte Bob eine
-verschlüsselte Nachricht zukommen lassen.
-Ihr Klartext $T$ enthält den Buchstaben "`C"'. C ist der dritte Buschstabe im
-Alphabet, also wählen wir die 3. Somit ergibt sich $T = 3$.
-Als nächstes werden die Schlüssel generiert. Hierzu denken wir uns zunächst 2
+ASCII-Tabelle)}\newline\newline Nehmen wir an Alice mÃ¶chte Bob eine
+verschlÃ¼sselte Nachricht zukommen lassen.
+Ihr Klartext $T$ enthÃ¤lt den Buchstaben "`C"'. C ist der dritte Buschstabe im
+Alphabet, also wÃ¤hlen wir die 3. Somit ergibt sich $T = 3$.
+Als nÃ¤chstes werden die SchlÃ¼ssel generiert. Hierzu denken wir uns zunÃ¤chst 2
 verschiedene Primzahlen aus und multiplizieren sie miteinander um das
 Produkt $N$ herauszubekommen.
 \begin{displaymath}
 p = 5, q = 7 \rightarrow N = p * q = 35
 \end{displaymath}
 Danach bestimmen wir $\phi(N)$. Das besondere hierbei ist, dass $N$ aus
-2 Primzahlen besteht. Für Primzahlen gilt: $ \phi(p) = p-1$. Somit gilt für unser
-Beispiel:
+2 Primzahlen besteht. FÃ¼r Primzahlen gilt: $ \phi(p) = p-1$. Somit gilt fÃ¼r
+unser Beispiel:
 \begin{displaymath}
 \phi(N) = \phi(p) * \phi(q) = (p-1)*(q-1) = 4*6 = 24 
 \end{displaymath}
 Jetzt brauchen wir unser $e$. $e$ muss teilerfremd zu $\phi(N)$ sein. Wie im
-Grundlagenteil erläutert, gilt für $e$ folgende Regel: 
+Grundlagenteil erlÃ¤utert, gilt fÃ¼r $e$ folgende Regel: 
 \begin{displaymath}
-ggT(e,N) = 1, wobei \ 1<e<\phi(N)
+e \in \mathbb{N} \ | \ ggT(e,N) = 1 \ \ \gets \  \ 1<e<\phi(N)
 \end{displaymath}
 Das $e$ stellt immer eine Primzahl dar, wobei nicht jede Primzahl teilerfremd
-zu $e$ sein muss. In diesem Beispiel wäre 3 für $e$ keine gültige Primzahl da
-$24/3 \neq 1$. In diesem Fall wird $e$ auf den Wert $e = 11$ gesetzt. Das $e$
-sollte zudem nicht allzu klein gewählt sein. Trotz einer erheblichen Einbußung
-der Performance des Algortihmuses, ist es sehr unsicher, Zahlen wie 3 oder 17,
-zu verwenden. Falls ein Angreifer versuchen sollte sich das $\phi(N)$ durch
-zurückrechnen herzuleiten, so wird es für ihn nicht leichter. Ebenso sollte es
+zu $e$ sein muss. In diesem Beispiel wÃ¤re 3 fÃ¼r $e$ keine gÃ¼ltige Primzahl da
+$24/3 = 8$. In diesem Fall wird $e$ auf den Wert $e = 11$ gesetzt. Das
+$e$ sollte zudem nicht allzu klein gewÃ¤hlt sein. Trotz einer erheblichen
+EinbuÃŸung der Performance des Algorithmuses, ist es sehr unsicher, Zahlen wie 3
+oder 17, zu verwenden. Falls ein Angreifer versuchen sollte sich das $\phi(N)$ durch
+zurÃ¼ckrechnen herzuleiten, so wird es fÃ¼r ihn nicht leichter. Ebenso sollte es
 vermieden werden $p$ oder $q$ als $e$ zu benutzen.
 \newline\newline
-Der öffentliche Schlüssel wäre somit $KeyOeffentlich = (11, 35)$.
+Der Ã¶ffentliche SchlÃ¼ssel wÃ¤re somit $KeyOeffentlich = (11, 35)$.
 \newline\newline
-Im nächsten Schritt wird nun $d$ bestimmt. $d$ muss das Inverse von $e \ mod(N)$
-darstellen, damit die allgemeine Formel $e*d \equiv 1 \ mod(N)$ gilt. $e$ wurde
-so ausgesucht, dass es genau ein Inverses gibt. Um das Element zu berechnen
-benötigen wir hier den erweiterten euklidischen Algorithmus. Dieser wurde im
-Einleitungsteil umfassend erklärt. Als diophantische Gleichung ergibt sich:
+Im nÃ¤chsten Schritt wird nun $d$ bestimmt. $d$ muss das Inverse von $e \
+mod(\phi(N))$ darstellen, damit die allgemeine Formel $e*d \equiv 1 \
+mod(\phi(N))$ gilt.
+$e$ wurde so ausgesucht, dass es genau ein Inverses gibt. Um das Element zu berechnen
+benÃ¶tigen wir hier den erweiterten euklidischen Algorithmus. Dieser wurde im
+Einleitungsteil umfassend erklÃ¤rt. Als diophantische Gleichung ergibt sich:
 \begin{displaymath}
 11*x + 24 * y = 1
 \end{displaymath}
@@ -199,33 +205,33 @@ Den Rechenweg der Gleichung erkennen Sie in Abbildung 2.\newline
 des erweiterten euklidischen Algorithmus zur diophantischen Gleichung $11*x +
 24*y = 1$}
 \end{figure}
-Das X aus der Tabelle bildet das Inverse-Element, welches wir benötigen. An
-dieser Stelle können 2 Besonderheiten auftreten.
+Das x aus der Tabelle bildet das Inverse-Element, welches wir benÃ¶tigen. An
+dieser Stelle kÃ¶nnen 2 Besonderheiten auftreten.
 \begin{enumerate}
   \item Wie in unserem Fall spiegelt unser $d$ auch unser $e$ wieder. Dies ist
   nicht einem Rechenfehler geschuldet, sondern der Tatsache der kleinen
-  Schlüssellänge unseres Beispiels (6 Bit). Ab einer größeren Schlüssellänge
+  SchlÃ¼ssellÃ¤nge unseres Beispiels (6 Bit). Ab einer grÃ¶ÃŸeren SchlÃ¼ssellÃ¤nge
   unterscheiden sich $d$ und $e$ mit wachsender Wahrscheinlichkeit. Das es sich
-  um keinen Rechenfehler handelt erkennt man später daran, dass die
+  um keinen Rechenfehler handelt erkennt man spÃ¤ter daran, dass die
   Zwischenergebnisse vor dem Modulo-Rechnen 2 unterschiedliche Zahlen sind.
-  \item Es könnte ebenso der Fall auftreten, dass das X nach dem
+  \item Es kÃ¶nnte ebenso der Fall auftreten, dass das x nach dem
   erweitereten euklidischen Algorithmus negativ ist. In diesem Fall darf man 
   den ermittelten Wert nocheinmal mod(N) rechnen, z.B. $-9 = 31 \ mod
   (40)$.\footnote{Vgl.
   http://www.onlinemathe.de/forum/RSA-Was-wenn-inverser-Schluessel-negativ-ist}
 \end{enumerate}
-Um zu überprüfen, ob man den erweiterten euklidischen Algorithmus richtig
+Um zu Ã¼berprÃ¼fen, ob man den erweiterten euklidischen Algorithmus richtig
 verwendet hat, werden die Zahlen in die obige Gleichung eingesetzt.
 \begin{displaymath}
 11*11 + 24 * -5 = 121 - 120 = 1
 \end{displaymath}
-Unser privater Schlüssel laute demnach $KeyPrivat = (11,35)$.
+Unser privater SchlÃ¼ssel laute demnach $KeyPrivat = (11,35)$.
 \newline\newline
-Nachdem wir nun unsere Schlüssel generiert haben, kann mit der Verschlüsselung
-angefangen werden. Zur Verschlüsselung gilt die Formel $V = T^e \ mod(N)$, mit
-der Bedingung das $T$ nicht größer als $N$ ist, sonst wäre das Modulo-Rechnen
-beim Entschlüsseln nicht erfolgreich.
-In diesem Beispiel laute die Verschlüsselungsformel wie folgt:
+Nachdem wir nun unsere SchlÃ¼ssel generiert haben, kann mit der VerschlÃ¼sselung
+angefangen werden. Zur VerschlÃ¼sselung gilt die Formel $V = T^e \ mod(N)$, mit
+der Bedingung das $T$ nicht grÃ¶ÃŸer als $N$ ist, sonst wÃ¤re das Modulo-Rechnen
+beim EntschlÃ¼sseln nicht erfolgreich.
+In diesem Beispiel laute die VerschlÃ¼sselungsformel wie folgt:
 \begin{displaymath}
 V = 3^{11} \ mod(35)
 \end{displaymath}
@@ -243,12 +249,12 @@ Rechenweg:
 \equiv 12
 \end{displaymath}
 \newline
-Verschlüsselt ergibt der Klartext $T$ nun den Wert $V = 12$. Unser Buchstabe
-"`C"' symbolisiert für einen Außenstehenden theoretisch nun den
+VerschlÃ¼sselt ergibt der Klartext $T$ nun den Wert $V = 12$. Unser Buchstabe
+"`C"' symbolisiert fÃ¼r einen AuÃŸenstehenden theoretisch nun den
 Buchstaben "`L"'.
 \newline\newline 
-Um zu zeigen, dass der private Schlüssel trotz gleichem $d$ und $e$ stimmt,
-können wir den Geheimtext wieder entschlüsseln.
+Um zu zeigen, dass der private SchlÃ¼ssel trotz gleichem $d$ und $e$ stimmt,
+kÃ¶nnen wir den Geheimtext wieder entschlÃ¼sseln.
 Die Formel dazu lautet $T = V^d \ mod(N)$.
 
 \begin{displaymath}
@@ -274,91 +280,91 @@ Rechenweg:
 \end{displaymath}
 
 Man erkennt, dass unser Klartext $T = 3$ lautet und somit gleich unserer
-Ausgangszahl ist. Hiermit wurde bewiesen, dass die Schlüssel korrekt sind und
-das Ver-/Entschlüsseln erfolgreich war.
+Ausgangszahl ist. Hiermit wurde bewiesen, dass die SchlÃ¼ssel korrekt sind und
+das Ver-/EntschlÃ¼sseln erfolgreich war.
 
 \section{Sicherheit des RSA-Verfahrens}
 Nachdem die mathematischen Aspekte des RSA-Verfahrens aufgezeigt worden sind,
-stellt sich natürlich die Frage, wie standhaft denn das Konzept gegenüber
-Angriffen ist. Grundsätzlich gilt natürlich: "`Je länger die Schlüssellänge,
-desto sicherer das gesamte Verfahren"`. Gängige Werte für das RSA-Verfahren sind
+stellt sich natÃ¼rlich die Frage, wie standhaft denn das Konzept gegenÃ¼ber
+Angriffen ist. GrundsÃ¤tzlich gilt natÃ¼rlich: "`Je lÃ¤nger die SchlÃ¼ssellÃ¤nge,
+desto sicherer das gesamte Verfahren"`. GÃ¤ngige Werte fÃ¼r das RSA-Verfahren sind
 1024 oder 2048 Bit.\footnote{Vgl. \citet{KryptoIX} - S. 176} Generell kann man
 sagen, dass das RSA Verfahren bei gewissenhafter und richtiger Implementierung
-ein sehr sicheres Verfahren darstellt und bestens für Verschlüsselungen geeignet
+ein sehr sicheres Verfahren darstellt und bestens fÃ¼r VerschlÃ¼sselungen geeignet
 ist. Die Kehrseite der Medallie ist die Tatsache, dass die besten Verfahren auch
 die besten Hacker anlocken um sie zu knacken. An dieser Stelle seien 3
 verschiedene Herangehensweisen dargestellt.
-\subsection{Vollständige Schlüsselsuche}
-Die vollständige Schlüsselsuche fällt unter die Kategorie der
+\subsection{VollstÃ¤ndige SchlÃ¼sselsuche}
+Die vollstÃ¤ndige SchlÃ¼sselsuche fÃ¤llt unter die Kategorie der
 "`Key-Only-Attacks"' (auf Deutsch: Key-Substitution-Angriffe). Dabei "`versucht
-ein Angreifer, sich einen Signaturprüfschlüssel zu generieren, so dass ein
+ein Angreifer, sich einen SignaturprÃ¼fschlÃ¼ssel zu generieren, so dass ein
 gegebenes Nachricht/Signatur-Paar eines anderen Benutzers auch bei der
-Verifikation mit seinem Signaturprüfschlüssel \textit{gültig}
-ausgibt."'\footnote{siehe \citet{SpringerKey} - S. 389} Bezogen auf RSA hieße
-das, dass der Angreifer so lange einen Schlüssel erzeugen würde, bis aus einem
-Geheimtext ein (logischer) Klartext werden würde. Betrachten wir den Aufwand
-$O(n/2)$ dieser Suche bei einer Schlüssellänge von 256-Bit, müsste der Angreifer
-2$^{255}$ Schlüssel im Durschschnitt (Average Case) generieren. Das
-enstpricht ungefähr 10$^{76}$ verschiedenen Schlüsseln - zum Vergleich das
-Universum ist 10$^{18}$ Sekunden alt. Für einen "`überschaubaren"' Zeitraum zur
-Findung der Lösung, müsste man ungefähr 10$^{58}$ verschiedene Schlüssel
+Verifikation mit seinem SignaturprÃ¼fschlÃ¼ssel \textit{gÃ¼ltig}
+ausgibt."'\footnote{siehe \citet{SpringerKey} - S. 389} Bezogen auf RSA hieÃŸe
+das, dass der Angreifer so lange einen SchlÃ¼ssel erzeugen wÃ¼rde, bis aus einem
+Geheimtext ein (logischer) Klartext werden wÃ¼rde. Betrachten wir den Aufwand
+$O(n/2)$ dieser Suche bei einer SchlÃ¼ssellÃ¤nge von 256-Bit, mÃ¼sste der Angreifer
+2$^{255}$ SchlÃ¼ssel im Durschschnitt (Average Case) generieren. Das
+enstpricht ungefÃ¤hr 10$^{76}$ verschiedenen SchlÃ¼sseln - zum Vergleich das
+Universum ist 10$^{18}$ Sekunden alt. FÃ¼r einen "`Ã¼berschaubaren"' Zeitraum zur
+Findung der LÃ¶sung, mÃ¼sste man ungefÃ¤hr 10$^{58}$ verschiedene SchlÃ¼ssel
 ausprobieren.\footnote{Vgl. \citet{KryptoIX} - S. 177}
 \subsection{Faktorisierungsproblem}
-Um den Aufwand der vollständigen Schlüsselsuche zu reduzieren, wäre es
+Um den Aufwand der vollstÃ¤ndigen SchlÃ¼sselsuche zu reduzieren, wÃ¤re es
 sinnvoller die verwendeten Primzahlen $p$ und $q$ herauszufiltern. Aus Ihnen
-wäre es möglich, ohne großen Aufwand, den privaten Schlüssel zu generieren. Eine
-Methode dazu wäre das $N$ des öffentlichen Schlüssels wieder zu zerlegen. Denn
-$N$ ist schließlich das Produkt beider Primzahlen.
+wÃ¤re es mÃ¶glich, ohne groÃŸen Aufwand, den privaten SchlÃ¼ssel zu generieren. Eine
+Methode dazu wÃ¤re das $N$ des Ã¶ffentlichen SchlÃ¼ssels wieder zu zerlegen. Denn
+$N$ ist schlieÃŸlich das Produkt beider Primzahlen.
 Die sogenannte \emph{Primfaktorzerlegung oder der Faktorisierungsangriff}
-besitzt jedoch einen Nachteil. Bei sehr großen Produkten von 2 verschiedenen
+besitzt jedoch einen Nachteil. Bei sehr groÃŸen Produkten von 2 verschiedenen
 Primzahlen, ist der Algorithmus nicht effizient genug, das Problem in
-annehmbarer Zeit zu lösen.
+annehmbarer Zeit zu lÃ¶sen.
 Der Weltrekord einer faktorisierten RSA-Primzahl liegt derzeit bei einem 768-Bit
-Schlüssel, dass sind ungefähr 232 Dezimalstellen - die Zeitdauer dafür
+SchlÃ¼ssel, dass sind ungefÃ¤hr 232 Dezimalstellen - die Zeitdauer dafÃ¼r
 entsprach knapp 2,5 Jahre.
 (Zum Vergleich, ein Faktor des RSA-768 lautet: \newline 
 $347807169895689878604416984821269081770479498371376856891
 2431388982883793878$\newline$002287614711652531743087737814467999489$)\footnote{siehe
 \citet{768RSA} - S. 13}
-Im Umkehrschluss bedeutet das, dass ein 1024-Bit Schlüssel die minimale
-Schlüssellänge heutzutage sein sollte und man damit aber noch ausreichend
-geschützt ist.
+Im Umkehrschluss bedeutet das, dass ein 1024-Bit SchlÃ¼ssel die minimale
+SchlÃ¼ssellÃ¤nge heutzutage sein sollte und man damit aber noch ausreichend
+geschÃ¼tzt ist.
 \subsection{TWINKLE und TWIRL}
 Kurioser Weise schlug der RSA-Miterfinder Adi Shamir 1999 auf einer
-Eurocrypt-Konferenz in Prag ein Konzept für eine Maschine dar, welche speziell
+Eurocrypt-Konferenz in Prag ein Konzept fÃ¼r eine Maschine dar, welche speziell
 auf das Problem der Faktorisierung ausgerichtet sein sollte -
 TWINKLE (The Weizmann Insitute Key Locating Engine).\footnote{Vgl.
 \citet{TWINKLE}} Das besondere an dieser Maschine ist ihre Bauweise, die
 keinesfalls einem Computer sondern einen elektronisch, optischen Apparat
-ähnelte.
+Ã¤hnelte.
 2003 stellte Shamir erneut eine solche Maschine mit einem Kollegen vor - den
 TWIRL (The Weizmann Insitute relation Locator). Doch auch TWIRL scheint ebenso
 wie TWINKLE bisher nur als Konzept zu existieren und noch nie gebaut worden zu
-sein. Shamir empfiehlt trotzdem für sehr vertrauenswürdige Informationen nur
-Schlüssellängen von mindestens 2048 Bit zu verwenden.
+sein. Shamir empfiehlt trotzdem fÃ¼r sehr vertrauenswÃ¼rdige Informationen nur
+SchlÃ¼ssellÃ¤ngen von mindestens 2048 Bit zu verwenden.
 \subsection{Fazit}
-Es gibt verschiedene Angriffspunkte die das RSA-Verfahren zur Verfügung stellt
-und gewiss mehr als so manch anderes Verschlüsselungsverfahren (z.B.
+Es gibt verschiedene Angriffspunkte die das RSA-Verfahren zur VerfÃ¼gung stellt
+und gewiss mehr als so manch anderes VerschlÃ¼sselungsverfahren (z.B.
 Diffie-Hellmann). Dennoch ist die Verwendung von Einwegfunktionen bei einer hoch
-gewählten Schlüssellänge so enorm aufwendig sie wieder rückgängig zu machen,
+gewÃ¤hlten SchlÃ¼ssellÃ¤nge so enorm aufwendig sie wieder rÃ¼ckgÃ¤ngig zu machen,
 dass mit dem heutigen Stand der Technik es nicht in annehmbarer Zeit geknackt
 werden kann. Ein ernstzunehmendes Problem wird es erst, sobald ein neues,
 effizientes mathematisches Verfahren zur Faktorisierung bekannt wird. Dann muss
-sich aber nicht nur das RSA um seine Sicherheit fürchten. 
-Als sichere Schlüssellänge gelten Werte ab 1024 Bit. Wer lieber zu viel als zu
-wenig Sicherheit bei seiner Verschlüsselung anstreben möchte, der darf beruhigt
+sich aber nicht nur das RSA um seine Sicherheit fÃ¼rchten. 
+Als sichere SchlÃ¼ssellÃ¤nge gelten Werte ab 1024 Bit. Wer lieber zu viel als zu
+wenig Sicherheit bei seiner VerschlÃ¼sselung anstreben mÃ¶chte, der darf beruhigt
 zur 4096 Bit-Variante greifen.
 \section{Riemannsche Vermutung}
-Ein großes Risiko für das RSA-Verfahren bietet der Beweis der \emph{Riemannschen
+Ein groÃŸes Risiko fÃ¼r das RSA-Verfahren bietet der Beweis der \emph{Riemannschen
 Hyptohese/Vermutung}.
 Genau wie beim Faktorisieren, gestaltet sich die Suche nach neuen Primzahlen ebenso als ein 
-schwieriges Unterfangen, welches enorme Rechenkapazitäten in Anspruch nimmt. Durch die 
-Unregelmäßigkeit der Primzahlen, muss jede einzelne Zahl genauestens betrachtet und geprüft werden, 
-ob sie eine Primzahl darstellt. Ein System hinter der Verteilung von Primzahlen scheint es nicht zu 
-geben. Bislang gibt es nur eine Vermutung/Hypothese, welche von Bernhard Riemann niedergeschrieben 
-worden ist. Er beschäftigte sich ausführlich mit der Verteilung von Primzahlen und stieß auf eine 
-interessante Entdeckung. 
-Er knüpfte bei seinen Forschungen an die Entdeckungen von Euler 100 Jahre zuvor
+schwieriges Unterfangen, welches enorme RechenkapazitÃ¤ten in Anspruch nimmt.
+Durch die UnregelmÃ¤ÃŸigkeit der Primzahlen, muss jede einzelne Zahl genauestens betrachtet
+und geprÃ¼ft werden, ob sie eine Primzahl darstellt. Ein System hinter der
+Verteilung von Primzahlen scheint es nicht zu geben. Bislang gibt es nur eine Vermutung/Hypothese, welche von Bernhard Riemann niedergeschrieben 
+worden ist. Er beschÃ¤ftigte sich ausfÃ¼hrlich mit der Verteilung von Primzahlen
+und stieÃŸ auf eine interessante Entdeckung. 
+Er knÃ¼pfte bei seinen Forschungen an die Entdeckungen von Euler 100 Jahre zuvor
 an, der mit der Formel
 \begin{displaymath}
 \frac{2^x}{2^x-1}*\frac{3^x}{3^x-1}*\frac{5^x}{5^x-1}*\frac{7^x}{7^x-1}*\frac{11^x}{11^x-1}*\ldots
@@ -371,23 +377,24 @@ bisschen um und bildete daraus die Zeta-Funktion.
 \zeta(2)=\sum_{n=1}^{\infty} \frac{1}{n^2}
 \end{displaymath}
 Das erstaunliche an dieser Funktion ist nun, dass die Nullstellen der
-Zeta-Funktion im dreidimensionalen Raum überall dort liegen, wo eine Primzahl
+Zeta-Funktion im dreidimensionalen Raum Ã¼berall dort liegen, wo eine Primzahl
 als Rechenzahl einbezogen worden ist. Noch erstaunlicher ist es, dass diese Nullstellen alle auf einer
 einzigen Geraden liegen. Die Riemannsche Vermutung legt als die These fest, dass
-alle existierenden Primzahlen auf dieser Geraden liegen müssten.\footnote{Vgl.
+alle existierenden Primzahlen auf dieser Geraden liegen mÃ¼ssten.\footnote{Vgl.
   https://www.youtube.com/watch?v=CaFoSTxkIvY - ab 12:15}
 \newline 
 Die Riemannsche Vermutung wurde auf die Liste der Millenium-Probleme gesetzt und zahlreiche 
 namenhaften Wissenschaftler haben schon versucht diese These zu beweisen. Bis jetzt ist es jedoch 
 noch keinem Gelungen. Sollte die Hypothese jemals beweisen werden, werden
-Primzahlen als Verschlüsselungsmethode nie wieder Verwendung finden dürfen. Die Kryptographie müsste dann 
-einen Rundumschlag erleben.
+Primzahlen als VerschlÃ¼sselungsmethode nie wieder Verwendung finden dÃ¼rfen. Die
+Kryptographie mÃ¼sste dann einen Rundumschlag erleben.
 \section{Schlusswort/Zusammenfassung}
-RSA ist ein sehr starker Verschlüsselungsalgorithmus, welcher vielen Tests
-bisher standgehalten hat. Es vereinbart viele praktische Anwendungsmöglichkeiten und arbeitet 
-trotz seiner komplexen Vorgehensweise relativ perfomant und zuverlässig. Das enthaltene mathematische 
-Problem der Faktorisierung bietet durch die langen Lösungszeiten einen guten Puffer, um den 
-Algorithmus noch weitere Jahre stabil zu halten. Sollte früher als erwartet oder erhofft eine Lösung
-des Problems auftauchen, könnte dies eine große Gefährdung des gesamten digitalen Zahlungsverkehrs und 
-der Geheimhaltung von vertraulichen Informationen bedeuten.
+RSA ist ein sehr starker VerschlÃ¼sselungsalgorithmus, welcher vielen Tests
+bisher standgehalten hat. Es vereinbart viele praktische AnwendungsmÃ¶glichkeiten
+und arbeitet trotz seiner komplexen Vorgehensweise relativ perfomant und
+zuverlÃ¤ssig. Das enthaltene mathematische Problem der Faktorisierung bietet durch die langen LÃ¶sungszeiten einen guten
+Puffer, um den Algorithmus noch weitere Jahre stabil zu halten. Sollte frÃ¼her
+als erwartet oder erhofft eine LÃ¶sung des Problems auftauchen, kÃ¶nnte dies eine
+groÃŸe GefÃ¤hrdung des gesamten digitalen Zahlungsverkehrs und der Geheimhaltung
+von vertraulichen Informationen bedeuten.
 \newpage

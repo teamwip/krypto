@@ -1,4 +1,4 @@
-\documentclass[a4paper, fontsize=12pt, toc=bibliographynumbered]{scrreprt}
+\documentclass[a4paper, fontsize=12pt, parskip=full, toc=bibliographynumbered]{scrreprt}
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
 \usepackage[T1]{fontenc}
@@ -13,6 +13,7 @@
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{graphicx}
 \usepackage{tabu}
+\usepackage{float}
 \usepackage[footnote]{acronym}
 \usepackage[colorlinks=true, linktoc=page, urlcolor=blue, citecolor=Green]{hyperref}
 \usepackage[ngerman]{cleveref}
@@ -49,8 +50,6 @@
   }%
 }
 \extendsectlevel{chapter}
-\extendsectlevel{section}
-\extendsectlevel{subsection}
 \makeatother
 \begin{document}
 \newcommand{\headerrule}{\tabucline -}
@@ -70,7 +69,7 @@
       \emph{Autoren:}\linebreak
       An-Nam \textsc{Pham},\linebreak
       Leonie \textsc{Schiburr},\linebreak
-      Patrick \textsc{Künzel},\linebreak
+      Patrick \textsc{Künzl},\linebreak
       Vasilij \textsc{Schneidermann}
       &
       \emph{Prüfer:}\linebreak

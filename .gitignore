@@ -3,6 +3,7 @@ auto/
 *.lof
 *.log
 *.lot
+*.lol
 *.out
 *.pdf
 *.toc

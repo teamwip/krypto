@@ -38,7 +38,7 @@ oder mathematisch:
 \begin{equation*}
 22+5 \equiv 3~(mod~24)
 \end{equation*}
-In RSA wird zum Teil in einem Restklassenring gearbeitet, um die Voraussetzung für eine Einswegsfunktion zu schaffen (siehe Nachtrag auf Seite \pageref{sec:Nachtrag})\footnote{vgl. \cite{restklassenring}}.
+In RSA wird zum Teil in einem Restklassenring gearbeitet, um die Voraussetzung für eine Einswegsfunktion zu schaffen (siehe Nachtrag auf Seite \pageref{sec:Nachtrag})\footnote{vgl. Rehn (2012)}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,7 +90,7 @@ wenn für eine injektive Funktion \(f:X\rightarrow Y\) folgendes gilt:
 \item[Beispiel für eine Einwegfunktion mit Falltür]\hfill \\
 Wenn man eine Tür ins Schloss fallen lässt, lässt sich diese Tür nur noch mit einem passenden Schlüssel öffnen.
 \end{description}
-Für das RSA-Kryptosystem wird eine solche Einwegfunktion mit Falltür verwendet. Die Einwegfunktion basiert auf dem Faktorisierungsproblem und die Falltür ist die Bestimmung des privaten Schlüssels mit Hilfe des öffentlichen Schlüssels. Die geheimzuhaltende Falltürinformation sind die beiden Primfaktoren der Zahl, die in beiden Schlüsseln vorhanden sind\footnote{vgl. \cite{einwegfunktion}}.
+Für das RSA-Kryptosystem wird eine solche Einwegfunktion mit Falltür verwendet. Die Einwegfunktion basiert auf dem Faktorisierungsproblem und die Falltür ist die Bestimmung des privaten Schlüssels mit Hilfe des öffentlichen Schlüssels. Die geheimzuhaltende Falltürinformation sind die beiden Primfaktoren der Zahl, die in beiden Schlüsseln vorhanden sind\footnote{vgl. MathePrisma (2001)}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,7 +144,7 @@ Da die 7 eine Primzahl ist\footnote{Bei großen Zahlen kann am Ende auch eine se
 \begin{equation*}
 126=2\cdot3\cdot3\cdot7=2\cdot3^{2}\cdot7\\
 \end{equation*}
-Damit ist die Primfaktorzerlegung durch Probedivision abgeschlossen\footnote{vgl. \cite{faktorisierung}}.\\
+Damit ist die Primfaktorzerlegung durch Probedivision abgeschlossen\footnote{vgl. Wikipedia (a) (2015)}.\\
 Die Probedivision stößt allerdings schnell an ihre Grenzen, wenn $x$ ein Produkt aus zwei großen Primzahlen $p$ und $q$ ist, da jede Primzahl von 2 bis $q$ (im Fall dass $p>q)$ durchprobiert werden muss. Eine etwas effektivere Methode für diesen Fall bietet die Faktorisierungsmethode von Fermat.\\ 
 \\
 \underline{Primfaktorzerlegung mit der Faktorisierungsmethode von Fermat}\\
@@ -229,7 +229,7 @@ m &= a^{2}-b^{2} = (a+b) \cdot (a-b)\\
   &= 727 \cdot 619\\
 \Rightarrow m &=p \cdot q = 727 \cdot 619
 \end{align*}
-Damit ist die Primfaktorzerlegung durch die Faktorisierungsmethode von Fermat abgeschlossen\footnote{vgl. \cite{faktorisierung_fermat}}.\\
+Damit ist die Primfaktorzerlegung durch die Faktorisierungsmethode von Fermat abgeschlossen\footnote{vgl. Wikipedia (b) (2015)}.\\
 Seine Stärke kann diese Methode ausspielen, wenn $p$ und $q$ sich nicht stark voneinander unterscheiden (nur eine kleine Differenz haben) und somit nahe $\sqrt{m}$ liegen.\\
 \\
 \underline{Zur Verdeutlichung:}
@@ -283,7 +283,7 @@ Da die $\varphi$-Funktion eine multiplikative\footnote{Eine zahlentheoretische F
 $\varphi(15)=\varphi(5\cdot3)=\varphi(5)\cdot\varphi(3)=(5-1)\cdot(3-1)=8$
 \\
 \\
-Eine wichtige Anwendung findet die $\varphi$-Funktion in RSA bei der Generierung des Public- und Private Keys\footnote{vgl. \cite{euler_phi}}.
+Eine wichtige Anwendung findet die $\varphi$-Funktion in RSA bei der Generierung des Public- und Private Keys\footnote{vgl. Steinfield (2015)}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -319,7 +319,7 @@ r_1 &= q_3\cdot r_2 + r_3\\
 &\vdots\\
 r_{n-1} &= q_{n+1}\cdot r_n + 0
 \end{align*}
-Das $r_n$ der letzten Division ist der größte gemeinsame Teiler\footnote{vgl. \cite{euklid}}:
+Das $r_n$ der letzten Division ist der größte gemeinsame Teiler\footnote{vgl. Serlo, o.J}:
 \begin{equation*}
 ggT(a,b)=r_n
 \end{equation*}
@@ -340,12 +340,12 @@ Ein Element $x^{-1}$ ist das multiplikativ inverse Element von $x$, wenn folgend
  x \cdot x^{-1}=1
 \end{equation*}\\
 \underline{In einem Restklassenring sieht das multiplikativ inverse Element wie folgt aus:}\\
-Ein Element $a^{-1} \in \mathbb{Z}_n$ ist das multiplikativ inverse Element von $a \in \mathbb{Z}_n$, wenn folgende Bedingung erfüllt ist\footnote{vgl. \cite{inverse}}:
+Ein Element $a^{-1} \in \mathbb{Z}_n$ ist das multiplikativ inverse Element von $a \in \mathbb{Z}_n$, wenn folgende Bedingung erfüllt ist\footnote{vgl. Spiegelberg (2011)}:
 \begin{equation*}
 a \cdot a^{1} \equiv 1 \quad mod(n)
 \end{equation*}
 \underline{\textbf{Lemma von Bézout}}\\
-Das Lemma besagt folgendes\footnote{ \cite{bezout}}:\\
+Das Lemma besagt folgendes\footnote{Wikipedia (c) (2015)}:\\
 Der $ggT(a,b)$ lässt sich als Linearkombination von $a$ und $b$ mit ganzzahligen Koeffizienten darstellen:
 \begin{equation*}
 \forall~a,b \in \mathbb{Z}~\exists~s,t \in \mathbb{Z}~|~ggT(a,b)=s\cdot a+t\cdot b
@@ -463,7 +463,7 @@ mit den Produkten:
 0 &\equiv -54\cdot 986040 \quad mod(986040)\\
 1 &\equiv 54167\cdot 983 \quad mod(986040)\\
 \end{align*}
-Da $1 \equiv 54167\cdot 983~mod(986040)$ gilt, muss $54167$ das multiplikative inverse Element von $983~mod(986040)$ und somit $d$ sein\footnote{vgl. \cite{inverse}}.
+Da $1 \equiv 54167\cdot 983~mod(986040)$ gilt, muss $54167$ das multiplikative inverse Element von $983~mod(986040)$ und somit $d$ sein\footnote{vgl. Spiegelberg (2011)}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

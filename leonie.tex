@@ -1,2 +1,209 @@
+%!TEX root = main.tex
 \author{Autor: Leonie Schiburr}
-\chapter{\ac{PKI}, Zertifikate}
+\chapter{Zertifikate und Public-Key-Infrastructure}
+% Im folgenden Abschnitt soll die sichere Kommunikation mittels Zertifikaten und einer Public Key Infrastructure und die Gründe für die Nutzung
+% dieser Kommunikationsmittel näher beleuchtet werden.
+Im folgenden Abschnitt soll die sichere Kommunikation mittels Zertifikaten und einer Public-Key-Infrastructure (PKI) näher beleuchtet werden. Außerdem sollen Gründe für die Nutzung
+dieser Kommunikationsmittel genannt werden.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+Das in den vorherigen Kapiteln beschriebene Public-Key-Verschüsselungsverfahren ist für die Kommunikation im Internet am weitesten verbreitet. Obwohl diese (zeitlich) aufwendiger ist als die Symmetrische Verschlüsselung, wird diese bevorzugt. Denn bei einer symmetrischen Verschlüsselung bedeutet ein öffentlich werden des gemeinsamen, geheimen Schlüssels gegenüber Dritten, dass die gesamte Kommunikation abgefangen, manipuliert und missbraucht werden kann. Mit der Verwendung eines öffentlichen und eines privaten Schlüssels wird dieses Risiko minimiert.\footnote{vgl. Hochschule Trier B (2009)}
+\\
+\\
+Die beste Verschlüsselung nützt allerdings nichts, wenn die Nutzer der Methode nicht vertrauen. Woher weiß ein Anwender, dass der öffentliche Schlüssel,
+den er zum Versenden einer chiffrierten Nachricht an den Empfänger verwenden möchte, auch wirklich dem Empfänger gehört. Die Gefahr besteht, dass
+es sich um einen \glqq falschen\grqq~Schlüssel eines Betrügers handeln könnte, der über diesen an Daten gelangen will.
+\\
+\\
+Eine Möglichkeit, die Authentizität eines Schlüssels und die Identität des Eigentümers zu verifizieren, bieten Zertifikate und die Public-Key-Infrastructure.
+Die folgenden Kapiteln sollen diese Wege der sicheren Kommunikation näher beleuchten.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Zertifikate}
+Die sichere Kommunikation im Internet ist davon abhängig, dass sowohl die Authentizität, die Vertraulichkeit als auch die Integrität der Kommunikation untereinander gewahrt werden können.\\
+Mit Hilfe asymmetrischer Verschlüsselung (z.B. durch RSA) und die Verwendung von Zertifikaten, soll dies gewährleistet werden:\\
+\\
+\underline{\textbf{Authentizität:}}\\
+Absender A verschlüsselt eine Nachricht mit seinem privaten Schlüssel. Empfänger B kann die Nachricht mithilfe des öffentlichen Schlüssels von A entschlüsseln und weiß somit sicher, dass die Nachricht von Absender A verschickt wurde. Absender A hat seine Nachricht durch die Nutzung seines privaten Schlüssel digital signiert und somit seine Authentizität gesichert. Die Nachricht kann jedoch von jedem entschlüsselt werden, der Zugang zum öffentlichen Schlüssel von Absender A hat.\\
+\\
+\underline{\textbf{Vertraulichkeit:}}\\
+Um eine vertrauliche Nachricht zu übermitteln muss Absender A die Nachricht für Empfänger B mit dessen öffentlichen Schlüssel verschlüsseln. Die Nachricht kann anschließend nur noch mit dem privaten Schlüssel von Empfänger B wieder entschlüsselt werden. Da dieser nur im Besitz von Empfänger B ist und er diesen geheim hält, kann die Nachricht nur von B gelesen werden. Dadurch wird die Vertraulichkeit der Nachricht gewährleistet. Empfänger B kann jedoch nicht mit Sicherheit wissen, dass die gesendete Nachricht von Absender A stammt.\\
+\\
+Durch die Anwendung von beiden Schlüsseln kann sowohl die Vertraulichkeit der Nachricht, als auch die Authentizität gewährleistet werden.\\
+\\
+\underline{\textbf{Integrität:}}\\
+Der Teil der Nachricht, der geheim übermittelt werden soll, wird mit dem öffentlichen Schlüssel von Empfänger B verschlüsselt. Anschließend wird die gesamte Nachricht mit dem privaten Schlüssel von A verschlüsselt und so digital signiert.
+So kann Empfänger B sicher sein, dass er die Nachricht von A erhält und der vertrauliche Teil der Nachricht nur durch ihn mithilfe seines privaten Schlüssels gelesen werden kann. Durch dieses Verfahren kann die Integrität der Kommunikation gesichert werden.\\
+\\
+Um diese Kommunikation erfolgreich durchführen zu können, muss sich Absender und Empfänger jedoch sicher sein, dass der jeweilige öffentliche Schlüssel auch tatsächlich dem Kommunikationspartner gehört und der Schlüssel auch für die angewendete Verschlüsselung genutzt werden darf.\\
+\\
+Zertifikate stellen neben dem öffentlichen Schlüssel selbst Informationen bereit, mit denen sich die Authentizität des Schlüssels prüfen lässt. \footnote{vgl. Hochschule Trier B (2009)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Begriffsklärung}
+Zertifikate enthalten Informationen, welche die Identität des Eigentümers eines öffentlichen Schlüssels (und dem dazu gehörigen geheimen, privaten Schlüssel), den Aussteller des Zertifikats sowie weitere Eigenschaften des Schlüssels und Informationen über das Zertifikat selbst beschreiben. Insbesondere sind dies Informationen, um die Authentizität des Zertifikats verifizieren zu können.\footnote{vgl. Hochschule Trier B (2009)}\\
+\\
+Im Allgemeinen ist der Begriff des Zertifikats eher neutraler gehalten und muss nicht direkt auf einen kryptographischen Schlüssel bezogen sein. In der Praxis spricht man jedoch in den meisten Fällen von einem Public-Key-Zertifikat, das auf einen öffentlichen Schlüssel (Public-Key) verweist. \footnote{vgl. Wikipedia A (2014)} Diese Public-Key-Zertifikate basieren vornehmlich auf dem Format X.509, aktuell in der Version V3. \footnote{vgl. IT-Wissen (2016)}\\
+\\
+Zudem gibt es sogenannte Attributzertifikate. Diese enthalten keinen öffentlichen Schlüssel. Sie verweisen auf das Public-Key-Zertifikat und legen dessen Geltungs- und Anwendungsbereich genauer fest. Dies ermöglicht die Zuordnung von einer oder mehrerer Eigenschaften in unterschiedlichen Anwendungsfällen ohne das Originalzertifikat verändern zu müssen. Neben dem Verweis auf das entsprechende Zertifikat können Attribute beispielsweise Informationen über die Qualifikation einer Person oder Nutzungsbeschränkungen des Zertifikats dieser Person enthalten. Hier ein Beispiel: Herr B., Leitender Angestellter des Vertriebs SoSo GmbH, darf mit diesem Zertifikat Transaktionen bis maximal 2000€ durchführen.\\ 
+\\
+Zertifikate können auf verschiedene Arten ausgegeben werden, aber sollten möglichst von einer bekannten Instanz ausgestellt werden, der die Nutzer der Zertifikate vertrauen.\footnote{vgl. Wikipedia A (2014), vgl. Rouse, Margaret A (2015)}\\
+\\
+Die Bereitstellung, die Aktualisierung und der Widerruf von Zertifikaten wird durch diese Instanz, auch als Zertifizierungsstelle (Certification Authority, CA) bezeichnet, geregelt. Diese ist Teil der Public-Key-Infrastructur, welche die sichere Kommunikation im Internet mittels Zertifikaten bereitstellen kann und im Kapitel \textit{\nameref{sec:PKI}} näher erläutert wird.\footnote{vgl. IT-Wissen (2016)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Aufbau}
+Public-Key-Zertifikate bestehen in der Regel aus den folgenden Komponenten:\footnote{vgl. Rouse, Margaret A (2015), vgl. Hochschule Trier B (2009)} 
+\begin{itemize}
+\item Den Namen oder eine andere eindeutige Bezeichnung des Ausstellers des Zertifikates,
+\item eine Seriennummer des Zertifikats,
+\item Informationen zu Verfahren und Regeln, die bei der Ausgabe des Zertifikats verwendet wurden,
+\item die Angabe eines Zeitraums, in dem das Zertifikat gültig ist,
+\item der öffentlichen Schlüssel, auf den das Zertifikat sich bezieht,
+\item der Name oder eine andere eindeutige Bezeichnung des Besitzers des öffentlichen Schlüssels und gegebenenfalls weitere Informationen zum Besitzer,
+\item Angaben zu Anwendungs- und Geltungsbereich des öffentlichen Schlüssels,
+\item sowie die digitale Signatur des Ausstellers oder der ausstellenden Institution. Damit kann der Empfänger prüfen, ob das Zertifikat echt ist.
+\end{itemize}
+Zusätzliche Eigenschaften, die bestimmte Zusammenhänge betreffen, können in den bereits oben beschriebenen Attributzertifikaten genauer festgehalten werden.
+Die Vertrauenswürdigkeit eines Zertifikats hängt davon ab, ob und wie schnell es gesperrt werden kann und wie zuverlässig und zeitnah die Sperrung veröffentlicht wird, sollte die Gültigkeit des Zertifikats erlöschen. Dies kann neben dem normalen Ablaufen der Gültigkeitsdauer auch aufgrund von Kompromittierung des Schlüsselmaterials, Ungültigkeit der Zertifikatsdaten oder Verlassen der Organisation, die das Zertifikat bereitstellt (bspw. PKI), sein.\footnote{vgl. Wikipedia C (2015)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Funktionsweise}
+Zur Sicherstellung der Authentizität eines öffentlichen Schlüssels muss das dazugehörige Public-Key-Zertifikat geprüft werden. Dieses Zertifikat ist mit der digitalen Signatur des Ausstellers ausgestattet. Die Echtheit dieser Signatur kann mittels des öffentlichen Schlüssels des Ausstellers überprüft werden. Doch zur Verifizierung der Authentizität des öffentlichen Schlüssels des Ausstellers wird wiederum ein Zertifikat benötigt, welches wiederum mit einer digitalen Signatur versehen ist.\\
+\\
+Die Problematik besteht darin, dass diese Kette von digitalen Zertifikaten, auch Zertifizierungs- oder Validierungspfad genannt, theoretisch kein Ende hat. In der Regel wird dies dadurch gelöst, dass das \glqq letzte\grqq~Zertifikat von einer Zertifizierungsstelle ausgegeben wird, der alle Kommunikationspartner ohne weitere Prüfung vertrauen.\footnote{vgl. Rouse, Margaret A (2015)}\\
+Die Infrastruktur, in der diese Kommunikation mit Zertifikaten und Prüfung dieser Zertifikate stattfindet, wird als Public-Key-Infrastructure bezeichnet.
+Auf die Implementierung einer solchen Zertifikathierarchie wird im Kapitel \textit{\nameref{sec:Vertrauensmodelle}} näher eingegangen.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Anwendung}
+Die Public-Key-Verschlüsselung mit Zertifikaten wird in vielen Bereichen, vor allem bei der Kommunikation im Internet angewendet:
+\begin{itemize}
+\item Sicherheit in Netzwerkprotokollen, wie SSL mit HTTPS, IPsec und SSH
+\item Schutz von E-Mail-Kommunikation beispielsweise durch Pretty Good Privacy (PGP): Pretty Good Privacy ist eine Software welche häufig zur Ver- und Entschlüsselung von E-Mails verwendet wird. Das Programm kann Daten sowohl symmetrisch als auch asymmetrisch verschlüsseln, Schlüssel erzeugen und diese verwalten.\footnote{vgl. Freund, Rosa (2004)}
+\item Authentisierung und Zugriffskontrolle bei Chipkarten, wie Unternehmensausweisen: Viele Unternehmen geben Unternehmensausweise, sogenannte Smart Cards, an ihre Mitarbeiter aus. Mit diesen Ausweisen mit Chip erhalten die Mitarbeiter in der Regel nicht nur Zutritt aufs Gelände. Mit Hilfe der auf dem Chip gespeicherten Zertifizierungen können die Mitarbeiter auf diverse Dienste mit eingeschränktem Zugang zugreifen, wie bestimmte Intranet-Anwendungen mit eingeschränktem Zugriff, oder Gebäude-Abschnitte, die nur befugte Personengruppen betreten dürfen, wie Serverräume.\footnote{Eigene Erfahrung mit Telekom Unternehmensausweis}
+\end{itemize}
+Auf die genauen Anwendungsbeispiele wird im Rahmen dieser schriftlichen Ausarbeitung des Vortrag nicht näher eingegangen, da dies den Umfang der Arbeit übersteigen würde.\\
+\\
+Zertifikate können von unterschiedlichen Zertifizierungsstellen in verschiedener Qualität ausgegeben werden. Die Qualität der Zertifikate hängt davon ab, wie gründlich die Angaben der Antragssteller geprüft werden. Diese Informationen werden in den Zertifizierungsrichtlinien (Certification Policies, CP) der Aussteller festgelegt. Zertifikate mit eingeschränkter Sicherheit sind häufig schon kostenlos zu erwerben. Hier kann jedoch das Risiko bestehen, dass die persönlichen Angeben der Antragssteller nicht ausreichend geprüft werden. Andere Zertifizierungsstellen bestehen auf der Vorlage von offiziellen Papieren, wie dem Personalausweis, bevor eine Zertifizierung ausgegeben wird, um ein höheres Sicherheitsniveau zu erreichen. Zertifikate mit höheren Sicherheitsstandards sind meist nur kostenpflichtig zu erhalten.\\
+\\
+Bekannte Anbieter für Webserver- und E-Mail-Zertifikate sind beispielsweise GlobalSign und TeleSec der Deutschen Telekom. Anbieter, die vertrauenswürdige Zertifikate im Einklang mit dem deutschen Gesetz anbieten, sind beispielsweise verschiedene Bundesnotarkammern, die T-Systems/Deutsche Telekom AG oder D-TRUST Gateway-Zertifikate der Bundesdruckerei-Gruppe.\footnote{vgl. Wikipedia C (2015)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Public Key Infrastructure}
+\label{sec:PKI}
+Wie oben beschrieben kann die Authentizität eines öffentlichen Schlüssels über Zertifikate verifiziert werden. Die Vergabe dieser Zertifikate sollte jedoch einheitlich für alle Kommunikationspartner sein und nachvollziehbar gemacht werden. Auch die Überprüfung und Sperrung der Schlüssel und Zertifikate selbst muss realisiert werden können. Die Realisierung einer solchen Infrastruktur wird auch Public-Key-Infrastructure (PKI) genannt.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Begriffsklärung}
+Eine Public-Key-Infrastructure ist eine Infrastruktur, die das Ausstellen, Verteilen, Überprüfung und Sperrung von Zertifikaten ermöglicht.
+Dabei stellt eine Zertifizierungsstelle (Certification Authority, CA) auf Antrag digitale Zertifikate zur Verfügung.\footnote{vgl. Rouse, Margaret B (2006)}\\
+Da Zertifikate als eine Art digitales Versprechen für Authentizität funktionieren, ist das Vertrauen zwischen Nutzer und Aussteller des Zertifikats und die Art und Weise, wie dieses Vertrauensverhältnis geschlossen wird, wesentlich für die Implementierung einer PKI.\\
+\\
+In der Literatur spricht man bei PKIs in der Regel von hierarchischen PKIs (Hierarchical Trust), die auf der Basis von verschiedenen Zertifizierungshierarchien arbeiten. Im Folgenden wird der Aufbau einer PKI auch anhand dieses Modells erklärt. Weitere Formen von Vertrauensmodellen werden im Abschnitt \textit{\nameref{sec:Vertrauensmodelle}} erläutert.\footnote{vgl. Schmeh, Klaus (2001), S.284 f.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Aufbau}
+Eine (hierarchische) Public-Key-Infrastructure ist aus den folgenden Komponenten aufgebaut:
+\begin{description}
+\item[Zertifizierungstelle / Zertifizierungsinstanz (Certification Authority, CA):]\hfil\\
+Die Zertifizierungsstelle ist für die Ausgabe und Überprüfung der Public-Key-Zertifikate zuständig. Sie stellt die Zertifikate bereit und signiert die Zertifikate digital, um die Authentizität zu bestätigen.
+\item[Registrierungsinstanz (Registration Authority, RA):]\hfill \\
+Die Registrierungsinstanz bietet Personen, Unternehmen, untergeordnete Zertifizierungsstellen oder Ähnliches die Möglichkeit, Zertifikate zu beantragen. Die Registrierungsstelle verifiziert Zertifizierungsanträge, bevor diese von einer Zertifizierungsstelle ausgegeben werden. Die Registrierungsinstanz überprüft die Richtigkeit aller für ein Zertifikat angegebenen Daten und genehmigt den Zertifizierungsantrag. Die Zertifizierungsstelle signiert diesen im Anschluss und gibt das Zertifikat an den Antragssteller aus.
+\item[Zertifikatssperrliste (Certificate Revocation List, CRL):]\hfill \\
+Die Zertifikatssperrliste ist eine Liste mit Zertifikaten, die vor Ablauf der Gültigkeitdauer gesperrt beziehungsweise zurückgezogen wurden. Wenn Beispielsweise ein
+privater Schlüssel entwendet wurde, wird das Schlüsselpaar gesperrt und in der Sperrliste vermerkt. So wird verhindert, dass der öffentliche Schlüssel weiterhin genutzt wird.
+Eine Zertifikatssperrliste hat eine genau definierte Laufzeit. Nach Ablauf dieser Laufzeit muss die Sperrliste neu mit den aktuellen Daten generiert werden. Alternativ zur Zertifikatssperrliste kann auch eine Positivliste (White-List) angelegt werden, in der alle zum aktuellen Zeitpunkt gültigen Zertifikate aufgelistet sind.\\
+\\
+Eine Public Key Infrastructure muss für ihre Nutzer eine Statusprüfung für Zertifikate bieten. Neben der Zertifikatssperrliste und der Positiv-Liste kann auch eine Online-Statusprüfung durchgeführt werden. Eine Online-Prüfung ist in der Regel dann notwendig, wenn eine zeitgenaue Prüfung, wie bei einem Finanztransfer, wichtig ist. Eine Online-Statusprüfung kann durch Validierungsdienste wie das Online Certificate Status Protocol (OCSP) oder das Server-based Certificate Validation Protocol (SCVP) durchgeführt werden.
+\item[Verzeichnungsdienst (Directory Service):]\hfill \\
+Der Verzeichnisdienst stellt ein oder mehrere Verzeichnisse bereit, welches alle in der PKI ausgestellten Zertifikate und die dazugehörigen öffentlichen Schlüssel enthält.\footnote{vgl. Rouse, Margaret B (2006)}
+\item[Validierungsdienst (Validation Authority, VA):]\hfill \\
+Dieser Dienst ermöglicht es, Zertifikate Online in Echtzeit zu Überprüfen (Online Certificate Status Protocol (OCSP) oder Server-based Certificate Validation Protocol (SCVP)).
+\item[Dokumentationen:]\hfill \\
+Eine PKI beinhaltet in der Regel mehrere Dokumente, welche die Prozesse, Verfahren und Regeln der PKI beschreiben. Diese machen Prozesse, wie den Registrierungsprozess, den Umgang mit den Schlüsseln, die Schlüsselerzeugung, Schutzmechanismen und eventuelle rechtliche Bedingungen für die Teilnehmer der PKI nachvollziehbar.\\
+Zu den Dokumenten gehören üblicherweise:
+	\begin{itemize}
+	\item Certification Policy (CP): beschreibt die selbst PKI und ihr Anforderungsprofil.
+	\item Certification Practise Statement (CPS): beschreibt die konkrete Umsetzung der Anforderungen an die PKI die in der CP formuliert wurden.
+	\item Policy Disclosure Statement (PDS): Falls das CPS der PKI nicht vollständig veröffentlicht werden soll, bietet das PDS einen Auszug, der veröffentlicht werden kann.
+	\end{itemize}
+\end{description}
+Neben diesen Komponenten machen natürlich auch die Zertifikatseigentümer (Subscriber, z.B. Services, Personen, Server, Router, o.ä.) und Nutzer (Participant), also diejenigen, die den Zertifikaten vertrauen, einen wichtigen Teil der PKI aus. Auf dem gegenseitigen Vertrauensverhältnis beruht eine PKI. \footnote{vgl. Wikipedia B (2016)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Funktionsweise}
+In einer hierarchischen PKI gibt es eine Wurzelzertifizierungsinstanz (Root-CA). Sie ist die oberste Zertifizierungsinstanz, der alle anderen Teilnehmer
+vertrauen müssen. Tatsächlich gibt es keine globale Root-CA. Viele Länder und größere Unternehmen richten ihre eigenen PKIs mit einer eigenen Wurzelzertifizierungsinstanz ein. Dieses Verhalten entspringt weniger aus mangelnden Vertrauen untereinander, als mehr aus dem Wunsch, die vollkommene Kontrolle über die Vorgänge in der PKI zu haben.\\
+\\
+Die Integrität der Wurzelinstanz und dessen privater Schlüssel sind essentiell für die sichere Kommunikation innerhalb der PKI, weshalb der Schutz der Root-CA die höchste Priorität hat. Diese sollte daher physisch durch Zugangskontrollen und im Netzwerk durch einen reinen Offline-Betrieb geschützt werden, um einen Zugriff von außen zu verhindern. In diesem Zusammenhang ist auch ein sicheres Verfahren zur Wiederherstellung der Wurzel-Zertifikate bei einem Schaden notwendig.\\
+\\
+Für die Verarbeitung von Signatur- und Verschlüsselungsanforderungen werden Unterzertifikate genutzt, die durch ein Wurzelzertifikat signiert wurden. Ihr Gültigkeitsdauer ist so kurz gewählt, dass es mit den heutigen technischen Möglichkeiten nicht machbar ist, den privaten Schlüssel der Instanz in diesen Zeitraum zu knacken.\\
+\\
+Eine Möglichkeit, eine gemeinsame, übergeordnete Instanz für mehrere PKIs zu implementieren, ist die Cross-Zertifizierung. Dabei stellen sich die Wurzelinstanzen der jeweiligen PKIs gegenseitig ein (Cross-)Zertifikat aus. Dabei sind die Regelungen der einen PKI für die andere PKI nicht zwingend anzuwenden, weshalb die Definition der Vertrauensbeziehung zwischen den Parteien schwer festzulegen ist.\\
+\\
+Das Problem bei dieser bilateralen Zertifizierung ist die Anzahl an Cross-Zertifikaten, die dabei entsteht. Diese steigt quadratisch zur Anzahl der eingebundenen Wurzelzertifizierungsstellen. So entstehen bei 20 Wurzelinstanzen insgesamt 380 Cross-Zertifikate (20 $\cdot$ 19). Die Lösung dieses Problems stellt eine neutrale Bridge-Zertifizierungsstelle dar. Diese tauscht mit allen beteiligten Root-CAs Cross-Zertifikate aus. So lassen sich die Zertifikate jeder beteiligten PKI über die Zertifikate der Bridge-CA zu den Zertifikaten der anderen PKI zurückführen.\\
+\\
+Die Implementierung einer eigenen PKI ist in der Regel aufwändig und lohnt sich vor allem für größere Unternehmen oder größere Behörden. Kleinere Organisationen verzichten oftmals auf den Aufbau einer solchen Infrastruktur und beziehen ihre Zertifikate von speziellen Dienstleistern.\footnote{vgl. Wikipedia B (2016)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Vertrauensmodelle}
+\label{sec:Vertrauensmodelle}
+Neben der hierarchischen PKI gibt es noch andere Vertrauensmodell nach denen Zertifikate erstellt und vergeben werden können.\\
+\\
+\textbf{Direct Trust}\\
+Dieses Modell sieht vor, dass sich die Nutzer die Authentizität ihrer Schlüssel gegenseitig bestätigen: Person A bestätig Person B, dass der öffentliche Schlüssel ihm gehört. Person B vertraut Person A. Auch Person C nutzt nun den öffentlichen Schlüssel von Person A, da die Person C der Aussage von Person B vertraut und diese den Schlüssel von A bestätigt.\\
+\\
+\textbf{Web Of Trust}\\
+Beim Web Of Trust geht das Direct Trust Prinzip einen Schritt weiter. In diesem Fall stellen sich die Nutzer gegenseitig Zertifikate aus. Hier ein Beispiel zur Verdeutlichung: Person A möchte eine Nachricht an Person Z mit Hilfe dessen öffentlichen Schlüssels verschicken. Person A weiß jedoch nicht, ob sie den öffentlichen Schlüssel von Person Z trauen kann. Person B hat jedoch, beispielweise über Direct Trust verifiziert, dass der öffentliche Schlüssel tatsächlich Person Z gehört. Daher signiert er diesen Schlüssel. Person A vertraut Person B und weiß aufgrund seiner Signatur, dass der öffentliche Schlüssel von Z \glqq sicher\grqq~ist. Funktioniert die Kommunikation zwischen A und Z erfolgreich, signiert auch Person A den Schlüssel von Z. So entsteht ein Pfad von \glqq vertrauenswürdigen Schlüsseln\grqq~die den unbekannten Schlüssel verifizieren.\\
+\\
+Für viele Kommunikationsarten ist dieses Prinzip der gegenseitigen Bestätigung jedoch zu unsicher, weshalb in diesen Fällen eine hierarchische PKI bevorzugt wird.\footnote{vgl. Schmeh, Klaus (2001), S.282 ff.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fazit}
+Zertifikate sind wichtig, um eine sichere Kommunikation mit der Möglichkeit, sich seinem Gegenüber zu versichern, zu ermöglichen. Die Public-Key-Infrastructure bietet die nötige Infrastruktur, um diese Überprüfung zu organisieren und Missbrauch so schnell wie möglich zu unterbinden.\\
+\\
+Das sensibelste Element dieser Struktur ist die Zertifizierungsstelle, deren Schutz die höchste Priorität haben sollte. Ein erfolgreicher Hackerangriff auf eine Zertifizierungsstelle würde zur Folge haben, dass die Hacker sich selbst seriöse Zertifikate ausstellen können. Selbst wenn die betroffenen CA-Zertifikate gesperrt werden, wird auch den legitimen Zertifikate nicht mehr vertraut und sie werden nicht mehr anerkannt. Je nach größe der PKI kann dies weitreichende Folgen für die IT-Infrastruktur haben, beispielsweise wenn die Zertifikate auch in staatlichen PKIs verwendet werden.\footnote{vgl. Wikipedia B (2016)}\\
+\\
+Vorfälle aus den vergangenen Jahren haben gezeigt, dass diese Angriffe nicht unrealistisch sind. 2015 musste Lenovo feststellen, dass sich auf vielen ihrer Notebooks eine vorinstallierte Adware als Wurzelzertifizierung im Speicher des Geräts festgesetzt hatte, mit der sich Man-in-the-Middle-Angriffe realisieren ließen.
+\footnote{vgl. Bocek, Kevin (2016)}
+
+Der Schutz der eigenen PKI ist aktueller denn je. Aufgrund der technischen Möglichkeiten der Hacker ist ein Angriff nicht immer zu verhindern.
+Daher sollte der Fokus darauf liegen, wie man auf Angriffe best- und schnellstmöglich reagiert. Das Risikomanagement spielt hier die wichtigste Rolle.

@@ -50,13 +50,14 @@ zu vollkommen verschiedenen Hashwerten führen\footnote{S.~208,
 Falls die Hashfunktion auf einen relativ kleinen Bereich von
 Nachrichten angewandt wird, ist es möglich den Wert der Nachricht
 selbst als Hashwert zu nutzen.  Dies wird zum Beispiel für das Hashing
-vom Datentyp \emph{Integer} im OpenJDK
-genutzt\footnote{\url{http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/6-b14/java/lang/Integer.java\#Integer.hashCode\%28\%29}}.
+vom Datentyp \emph{Integer} im OpenJDK genutzt\footnote{GrepCode
+  (2015), Online im Internet}.
 
 Für das Hashing von Strings verwendet man etwas komplexere
 Algorithmen.  Ein solches Beispiel wurde von Daniel J.~Bernstein
-veröffentlicht\footnote{\url{https://groups.google.com/forum/\#!msg/comp.lang.c/VByoIO8GySs/2XN9iGTpgmsJ}},
-dieses kann mit wenig Aufwand in C implementiert werden\footnote{\url{http://www.cse.yorku.ca/~oz/hash.html}}:
+veröffentlicht\footnote{Bernstein, Daniel J.~(1990), Online im
+  Internet}, dieses kann mit wenig Aufwand in C implementiert
+werden\footnote{Yigit, Ozan (2003), Online im Internet}:
 
 \begin{lstlisting}[language=C,basicstyle=\ttfamily\footnotesize,keywordstyle=\bfseries\color{black},captionpos=b,caption={djb2}]
 unsigned long
@@ -137,8 +138,8 @@ eingesetzt\footnote{S.~222-223, Kryptographie}.
 SHA3 ist der neueste Standard der SHA-Familie welcher die Schwächen
 der bisherigen Varianten vermeidet.  In einem internationalen
 Wettbewerb wurde der Keccak-Algorithmus Mitte 2015 auserwählt und ist
-damit die Empfehlung für sicheres
-Hashing\footnote{\url{http://www.nist.gov/itl/csd/201508_sha3.cfm}}.
+damit die Empfehlung für sicheres Hashing\footnote{NIST (2015), Online
+  im Internet}.
 
 \section{Bekannte Attacken}
 
@@ -233,8 +234,7 @@ gewährleistet\footnote{S.~394, IT-Sicherheit}.
 
 \section{Signaturen mit \ac{HMAC}s}
 
-Bei dem
-\ac{HMAC}-Verfahren\footnote{\url{https://tools.ietf.org/html/rfc2104}}
+Bei dem \ac{HMAC}-Verfahren\footnote{IETF (1997), Online im Internet}
 wird eine bekannte kryptographische Hashfunktion für diesen
 Einsatzzweck verwendet.  In der Praxis kommen dafür MD5 und SHA1 in
 Frage.  Sind zusätzlich zum Schlüssel $k$ und Nachricht $m$ noch

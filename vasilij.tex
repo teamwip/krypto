@@ -213,10 +213,66 @@ sind\footnote{S.~215"=217, Kryptographie}.
 \author{Autor: Vasilij Schneidermann}
 \chapter{Signaturen}
 
-Involvieren schwarze Magie.
+Mit den bisher vorgestellten Verfahren war es möglich die Integrität
+einer Nachricht zu beweisen, jedoch nicht die Authentizität der
+Kommunikationspartner.  Für diese zusätzliche Anforderung werden
+\ac{MAC}s verwendet\footnote{S.~393, IT-Sicherheit}.  Benötigt man
+noch Verbindlichkeit um das Abstreiten der Urheberschaft
+auszuschließen, ist eine digitale Signatur notwendig\footnote{S.~240,
+  Kryptographie}.
 
 \section{\ac{MAC}s}
 
-\section{Signaturen mit \ac{MAC}s}
+Ein \ac{MAC} ist nichts anderes als eine parametrisierte Hashfunktion,
+d.h.~eine Hashfunktion welche zusätzlich zu der Nachricht $m$ noch
+einen Schlüssel $k$ verwendet.  Die Kommunikationspartner einigen sich
+auf einen Schlüssel und verwenden diesen um einen \ac{MAC} der
+gesendeten und empfangenen Nachricht zu errechnen.  Stimmt dieser
+überein, ist die Authentizität des Dokuments
+gewährleistet\footnote{S.~394, IT-Sicherheit}.
 
-\section{Alternative Signaturverfahren}
+\section{Signaturen mit \ac{HMAC}s}
+
+Bei dem
+\ac{HMAC}-Verfahren\footnote{\url{https://tools.ietf.org/html/rfc2104}}
+wird eine bekannte kryptographische Hashfunktion für diesen
+Einsatzzweck verwendet.  In der Praxis kommen dafür MD5 und SHA1 in
+Frage.  Sind zusätzlich zum Schlüssel $k$ und Nachricht $m$ noch
+inneres und äußeres \emph{Padding} \texttt{ipad} und \texttt{opad}
+gegeben, errechnet sich der \ac{HMAC} wie folgt\footnote{S.~396"=397,
+  IT-Sicherheit}:
+
+$$HMAC(k, m) = H(K \oplus \texttt{opad} \parallel H(K \oplus \texttt{ipad} \parallel m))$$
+
+$\oplus$ symbolisiert hierbei den XOR-Operator, $\parallel$ ist die
+String-Konkatenation der Resultate.  \texttt{ipad} ist das Byte
+\texttt{0x36} und \texttt{opad} das Byte \texttt{0x5C}, beide
+wiederholt bis die Eingaben auf die für die Hashfunktion erforderliche
+Blocklänge aufgefüllt sind.
+
+\section{Digitale Signaturen}
+
+Eine digitale Signatur ist das rechtssichere digitale Äquivalent zur
+handschriftlichen Signatur.  Sie muss die folgenden Anforderungen
+erfüllen\footnote{S.~184, Kryptographie}:
+
+\begin{itemize}
+\item Identifikation des Urhebers
+\item Echtheit des Dokuments überprüfbar
+\item Fälschbarkeit des Dokuments nicht möglich
+\item Integrität des Dokuments bleibt erhalten
+\end{itemize}
+
+Aufgrund des zweiten Kriteriums können \ac{MAC}s nicht verwendet
+werden.  Die Echtheit des Dokuments muss nämlich von einer Drittperson
+bestätigt werden welche den gemeinsamen Schlüssel der
+Kommunikationspartner \emph{nicht} kennt.
+
+Glücklicherweise lässt sich für diesen Anwendungszweck das
+\ac{RSA}-Verfahren nutzen\footnote{S.~185, Kryptographie}.  Anstatt
+eine Nachricht mit einem privaten Schlüssel zu verschlüsseln und einem
+öffentlichen Schlüssel zu entschlüsseln, wird die Nachricht mit dem
+privaten Schlüssel entschlüsselt.  Das Resultat ist die digitale
+Signatur.  Verschlüsselt man diese mit dem öffentlichen Schlüssel,
+ergibt sich die originale Nachricht und der Beweis für die Echtheit
+der digitalen Signatur ist erbracht.

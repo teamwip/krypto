@@ -5,7 +5,7 @@
 Die Abbildung beliebiger Eingabedaten auf Ausgabedaten fester Größe
 wird allgemein als \emph{Hashing} bezeichnet.  Das konkrete Verfahren
 ist eine \emph{Hashfunktion}, das Ergebnis des Verfahrens ist der
-\emph{Hashwert}\footnote{S.~207, Kryptographie}.
+\emph{Hashwert}\footnote{Schmeh, Klaus (2009), S.~207}.
 
 Typische Anwendungsfälle für Hashing sind \emph{Hash Tables} und
 \emph{Sets} für die schnelle Suche eines Wertes in einem Wörterbuch,
@@ -27,23 +27,23 @@ geschlussfolgert werden, dass $H$ \emph{nicht} injektiv sein kann.
 Eine andere fundamentale Feststellung ist, dass durch diese Abbildung
 nicht jede Nachricht einen einzigartigen Hashwert haben kann.
 Vorkommnisse verschiedener Nachrichten mit dem gleichen Hashwert
-werden als \emph{Kollisionen} bezeichnet\footnote{S.~382,
-  IT-Sicherheit}.
+werden als \emph{Kollisionen} bezeichnet\footnote{Eckert, Claudia
+  (2013), S.~382}.
 
 Kollisionen sind als solches bei nicht-kryptographischen
 Anwendungsfällen eher ein Ärgernis welches z.B.~bei einer Hash Table
 gesondert behandelt wird und zu leicht verminderter Performance führt,
 bei kryptographischen Anwendungsfällen hingegen werden Verfahren
 bevorzugt welche das Risiko von auftretenden Kollisionen
-minimieren\footnote{S.~382, IT-Sicherheit}.
+minimieren\footnote{Eckert, Claudia (2013), S.~382}.
 
 Zur Vermeidung von Kollisionen werden üblicherweise zwei weitere
 Anforderungen an die Hashfunktion hinzugezogen.  Einerseits sollen
 möglichst alle möglichen Hashwerte erreichbar sein oder in anderen
 Worten, die errechneten Hashwerte gleichverteilt sein, andererseits
 ist es wünschenswert dass selbst minimale Änderungen an der Nachricht
-zu vollkommen verschiedenen Hashwerten führen\footnote{S.~208,
-  Kryptographie}.
+zu vollkommen verschiedenen Hashwerten führen\footnote{Schmeh, Klaus
+  (2009), S.~208}.
 
 \section{Beispiele nicht-kryptographischer Hashfunktionen}
 
@@ -78,15 +78,15 @@ hash(unsigned char *str)
 Für die Nutzung von Hashfunktionen in der Kryptographie kommen noch
 weitere Anforderungen hinzu.  Da Kollisionen bekanntermaßen
 existieren, sollte es für einen Angreifer nicht praktikabel sein eine
-Kollision zu finden\footnote{S.~209, Kryptographie}.  Dabei wird
-zwischen \emph{schwacher Kollisionsresistenz} und \emph{starker
+Kollision zu finden\footnote{Schmeh, Klaus (2009), S.~209}.  Dabei
+wird zwischen \emph{schwacher Kollisionsresistenz} und \emph{starker
   Kollisionsresistenz} unterschieden.
 
 \subsection{Schwach kollisionsresistente Hashfunktionen}
 
 Gegeben sei die bisherige Definition einer Hashfunktion.  Es müssen
-zusätzlich folgende Kriterien erfüllt werden\footnote{S.~382"=383,
-  IT-Sicherheit}:
+zusätzlich folgende Kriterien erfüllt werden\footnote{Eckert, Claudia
+  (2013), S.~382"=383}:
 
 \begin{enumerate}
 \item $H$ ist eine Einwegfunktion, d.h.~es ist leicht $h = H(m)$ zu
@@ -101,7 +101,8 @@ gleichen Hashwert aufweist.
 
 \subsection{Stark kollisionsresistente Hashfunktionen}
 
-Folgende Kriterien müssen erfüllt werden\footnote{S.~385}:
+Folgende Kriterien müssen erfüllt werden\footnote{Eckert, Claudia
+  (2013), S.~385}:
 
 \begin{enumerate}
 \item $H$ muss eine schwach kollisionsresistente Hashfunktion sein
@@ -117,13 +118,13 @@ MD5 ist aus historischen Gründen eine noch weitverbreitete
 kryptographische Hashfunktion, sollte aber aufgrund von
 Sicherheitsbedenken nicht mehr eingesetzt werden, da es möglich ist in
 relativ kurzer Zeit Kollisionen auf handelsüblicher Hardware zu
-finden\footnote{S.~224, Kryptographie}.
+finden\footnote{Schmeh, Klaus (2009), S.~224}.
 
 \subsection{\ac{SHA1}}
 
 SHA1 ist eine sehr populäre kryptographische Hashfunktion welche unter
-anderem in SSL, IPsec und PGP verwendet wird\footnote{S.~221,
-  Kryptographie}.  Jedoch wird an der Sicherheit gezweifelt, da es
+anderem in SSL, IPsec und PGP verwendet wird\footnote{Schmeh, Klaus
+  (2009), S.~221}.  Jedoch wird an der Sicherheit gezweifelt, da es
 mehrere Angriffe gegeben hat welche es ermöglichen könnten Kollisionen
 herbeizuführen.
 
@@ -131,7 +132,7 @@ herbeizuführen.
 
 SHA2 ist eine Familie an SHA1-Varianten deren Sicherheit noch unklar
 bleibt.  Aufgrunddessen werden sie in der Praxis selten
-eingesetzt\footnote{S.~222-223, Kryptographie}.
+eingesetzt\footnote{Schmeh, Klaus (2009), S.~222-223}.
 
 \subsection{\ac{SHA3}}
 
@@ -151,7 +152,8 @@ zwei mit dem gleichen Geburtstag geben wird.
 
 Ist $k$ die Anzahl an möglichen Geburtstage, kann man die Anzahl $n$
 an mindestens benötigten Personen für eine Wahrscheinlichkeit größer
-$0.5$ durch $\sqrt{k}$ annähern\footnote{S.~213, Kryptographie}.
+$0.5$ durch $\sqrt{k}$ annähern\footnote{Schmeh, Klaus (2009),
+  S.~213}.
 
 Die Formel kann auf Hashwerte ebenfalls angewendet werden.  Wenn
 dieser eine feste Länge $x$ hat, beträgt $k$ dann $2^x$.  $n$ wäre in
@@ -174,7 +176,8 @@ hoch, ist es möglich eine gefälschte Nachricht mit dem gleichen
 Hashwert wie die originale Nachricht zu finden.  Die
 Wahrscheinlichkeit dafür ist besonders hoch wenn die Schlüssellänge
 $x$ des Hashwertes kleiner $n$ ist, d.h.~es ist ratsam Hashwerte mit
-hoher Schlüssellänge zu nutzen\footnote{S.~211"=212, Kryptographie}.
+hoher Schlüssellänge zu nutzen\footnote{Schmeh, Klaus (2009),
+  S.~211"=212}.
 
 \subsection{Wörterbuchattacke}
 
@@ -190,15 +193,15 @@ Wert welcher zusammen mit der Nachricht gehasht wurde.  Während diese
 Vorgehensweise es für den Angreifer nicht schwieriger macht einen
 einzelnen Hashwert zu knacken, führt sie dazu, dass er nicht mehrere
 Hashwerte parallel knacken kann, da für jeden ein anderes Salt
-verwendet wird\footnote{S.~214, Kryptographie}.
+verwendet wird\footnote{Schmeh, Klaus, S.~214}.
 
 \emph{Key Stretching} ist eine andere solche Maßnahme.  Anstatt den
 Hashwert an sich zu nehmen, wird er mit einer hinreichend sicheren
 Anzahl an Vorgängen wiederholt bearbeitet.  Die einfachste Variante
 davon ist das Resultat der Hashfunktion erneut als Eingabe zu nutzen.
 Dadurch werden Angreifer gezwungen für jeden Versuch die gleiche
-Anzahl an Hash-Iterationen zu verwenden\footnote{S.~215,
-  Kryptographie}.
+Anzahl an Hash-Iterationen zu verwenden\footnote{Schmeh, Klaus (2009),
+  S.~215}.
 
 \subsection{Rainbow Tables}
 
@@ -209,7 +212,7 @@ auf kurze Passwörter gangbar, eine Kombination mit Wörterbuchattacken
 ist ebenfalls denkbar.  Salts und Key Stretching sind wirksame
 Abhilfen, da man durch sie größere Rainbow Tables erfordert welche
 womöglich nicht mehr praktikabel für den Angreifer
-sind\footnote{S.~215"=217, Kryptographie}.
+sind\footnote{Schmeh, Klaus (2009), S.~215"=217}.
 
 \author{Autor: Vasilij Schneidermann}
 \chapter{Signaturen}
@@ -217,10 +220,10 @@ sind\footnote{S.~215"=217, Kryptographie}.
 Mit den bisher vorgestellten Verfahren war es möglich die Integrität
 einer Nachricht zu beweisen, jedoch nicht die Authentizität der
 Kommunikationspartner.  Für diese zusätzliche Anforderung werden
-\ac{MAC}s verwendet\footnote{S.~393, IT-Sicherheit}.  Benötigt man
-noch Verbindlichkeit um das Abstreiten der Urheberschaft
-auszuschließen, ist eine digitale Signatur notwendig\footnote{S.~240,
-  Kryptographie}.
+\ac{MAC}s verwendet\footnote{Eckert, Claudia (2013), S.~393}.
+Benötigt man noch Verbindlichkeit um das Abstreiten der Urheberschaft
+auszuschließen, ist eine digitale Signatur notwendig\footnote{Schmeh,
+  Klaus (2009), S.~240}.
 
 \section{\ac{MAC}s}
 
@@ -230,7 +233,7 @@ einen Schlüssel $k$ verwendet.  Die Kommunikationspartner einigen sich
 auf einen Schlüssel und verwenden diesen um einen \ac{MAC} der
 gesendeten und empfangenen Nachricht zu errechnen.  Stimmt dieser
 überein, ist die Authentizität des Dokuments
-gewährleistet\footnote{S.~394, IT-Sicherheit}.
+gewährleistet\footnote{Eckert, Claudia (2013), S.~394}.
 
 \section{Signaturen mit \ac{HMAC}s}
 
@@ -239,8 +242,8 @@ wird eine bekannte kryptographische Hashfunktion für diesen
 Einsatzzweck verwendet.  In der Praxis kommen dafür MD5 und SHA1 in
 Frage.  Sind zusätzlich zum Schlüssel $k$ und Nachricht $m$ noch
 inneres und äußeres \emph{Padding} \texttt{ipad} und \texttt{opad}
-gegeben, errechnet sich der \ac{HMAC} wie folgt\footnote{S.~396"=397,
-  IT-Sicherheit}:
+gegeben, errechnet sich der \ac{HMAC} wie folgt\footnote{Eckert,
+  Claudia (2009), S.~396"=397}:
 
 $$HMAC(k, m) = H(K \oplus \texttt{opad} \parallel H(K \oplus \texttt{ipad} \parallel m))$$
 
@@ -254,7 +257,7 @@ Blocklänge aufgefüllt sind.
 
 Eine digitale Signatur ist das rechtssichere digitale Äquivalent zur
 handschriftlichen Signatur.  Sie muss die folgenden Anforderungen
-erfüllen\footnote{S.~184, Kryptographie}:
+erfüllen\footnote{Schmeh, Klaus (2009), S.~184}:
 
 \begin{itemize}
 \item Identifikation des Urhebers
@@ -269,10 +272,10 @@ bestätigt werden welche den gemeinsamen Schlüssel der
 Kommunikationspartner \emph{nicht} kennt.
 
 Glücklicherweise lässt sich für diesen Anwendungszweck das
-\ac{RSA}-Verfahren nutzen\footnote{S.~185, Kryptographie}.  Anstatt
-eine Nachricht mit einem privaten Schlüssel zu verschlüsseln und einem
-öffentlichen Schlüssel zu entschlüsseln, wird die Nachricht mit dem
-privaten Schlüssel entschlüsselt.  Das Resultat ist die digitale
-Signatur.  Verschlüsselt man diese mit dem öffentlichen Schlüssel,
-ergibt sich die originale Nachricht und der Beweis für die Echtheit
-der digitalen Signatur ist erbracht.
+\ac{RSA}-Verfahren nutzen\footnote{Schmeh, Klaus (2009), S.~185}.
+Anstatt eine Nachricht mit einem privaten Schlüssel zu verschlüsseln
+und einem öffentlichen Schlüssel zu entschlüsseln, wird die Nachricht
+mit dem privaten Schlüssel entschlüsselt.  Das Resultat ist die
+digitale Signatur.  Verschlüsselt man diese mit dem öffentlichen
+Schlüssel, ergibt sich die originale Nachricht und der Beweis für die
+Echtheit der digitalen Signatur ist erbracht.

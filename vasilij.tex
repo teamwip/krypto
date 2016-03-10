@@ -110,7 +110,105 @@ Folgende Kriterien müssen erfüllt werden\footnote{S.~385}:
 
 \section{Beispiele kryptographischer Hashfunktionen}
 
+\subsection{\ac{MD5}}
+
+MD5 ist aus historischen Gründen eine noch weitverbreitete
+kryptographische Hashfunktion, sollte aber aufgrund von
+Sicherheitsbedenken nicht mehr eingesetzt werden, da es möglich ist in
+relativ kurzer Zeit Kollisionen auf handelsüblicher Hardware zu
+finden\footnote{S.~224, Kryptographie}.
+
+\subsection{\ac{SHA1}}
+
+SHA1 ist eine sehr populäre kryptographische Hashfunktion welche unter
+anderem in SSL, IPsec und PGP verwendet wird\footnote{S.~221,
+  Kryptographie}.  Jedoch wird an der Sicherheit gezweifelt, da es
+mehrere Angriffe gegeben hat welche es ermöglichen könnten Kollisionen
+herbeizuführen.
+
+\subsection{\ac{SHA2}}
+
+SHA2 ist eine Familie an SHA1-Varianten deren Sicherheit noch unklar
+bleibt.  Aufgrunddessen werden sie in der Praxis selten
+eingesetzt\footnote{S.~222-223, Kryptographie}.
+
+\subsection{\ac{SHA3}}
+
+SHA3 ist der neueste Standard der SHA-Familie welcher die Schwächen
+der bisherigen Varianten vermeidet.  In einem internationalen
+Wettbewerb wurde der Keccak-Algorithmus Mitte 2015 auserwählt und ist
+damit die Empfehlung für sicheres
+Hashing\footnote{\url{http://www.nist.gov/itl/csd/201508_sha3.cfm}}.
+
 \section{Bekannte Attacken}
+
+\subsection{Geburtstagsattacke}
+
+Das Geburtstagsparadoxon beschreibt das Phänomen, dass es schon in
+einer relativ kleinen Gruppe von Personen mit hoher Wahrscheinlichkeit
+zwei mit dem gleichen Geburtstag geben wird.
+
+Ist $k$ die Anzahl an möglichen Geburtstage, kann man die Anzahl $n$
+an mindestens benötigten Personen für eine Wahrscheinlichkeit größer
+$0.5$ durch $\sqrt{k}$ annähern\footnote{S.~213, Kryptographie}.
+
+Die Formel kann auf Hashwerte ebenfalls angewendet werden.  Wenn
+dieser eine feste Länge $x$ hat, beträgt $k$ dann $2^x$.  $n$ wäre in
+diesem Fall also $2^{\frac{x}{2}}$, d.h.~durch das
+Geburtstagsparadoxon wird die Schlüssellänge effektiv halbiert.  Ein
+Angreifer müsste also in der Lage sein sowohl diese Anzahl an
+Hashwerten errechnen sowie speichern zu können.  Deswegen verwendet
+man in der Praxis mehr als die doppelte Schlüssellänge von dem was ein
+Angreifer bewältigt bekommen würde, im Falle von SHA1 z.B.~160 Bits.
+
+\subsection{Substitutionsattacke}
+
+Kennt der Angreifer den Hashwert einer Nachricht die er zu seinem
+Gunsten fälschen möchte, kann er eine andere Nachricht konstruieren,
+Stellen finden welche er gefahrlos ersetzen kann ohne das Aussehen
+oder die Bedeutung der Nachricht zu ändern und alle Kombinationen
+möglicher Änderungen hashen.  Bei $n$ Änderungen wären dies $2^n$
+denkbare Kombinationen.  Ist die Anzahl an Kombinationen hinreichend
+hoch, ist es möglich eine gefälschte Nachricht mit dem gleichen
+Hashwert wie die originale Nachricht zu finden.  Die
+Wahrscheinlichkeit dafür ist besonders hoch wenn die Schlüssellänge
+$x$ des Hashwertes kleiner $n$ ist, d.h.~es ist ratsam Hashwerte mit
+hoher Schlüssellänge zu nutzen\footnote{S.~211"=212, Kryptographie}.
+
+\subsection{Wörterbuchattacke}
+
+Wird eine kurze Nachricht gehasht (wie z.B.~ein Passwort), ist eine
+Wörterbuchattacke möglich.  Anstatt alle denkbaren Nachrichten
+auszuprobieren, verwendet man ein Wörterbuch und probiert seine
+Einträge durch.  Dieser Angriff ist erstaunlich effektiv in der
+Praxis, da eine Menge Benutzer nicht auf sichere Passwörter setzen.
+
+Eine mögliche Maßnahme zur Erhöhung des Angreiferaufwands ist das
+\emph{Salt}, ein zusammen mit jedem einzelnen Hashwert gespeicherter
+Wert welcher zusammen mit der Nachricht gehasht wurde.  Während diese
+Vorgehensweise es für den Angreifer nicht schwieriger macht einen
+einzelnen Hashwert zu knacken, führt sie dazu, dass er nicht mehrere
+Hashwerte parallel knacken kann, da für jeden ein anderes Salt
+verwendet wird\footnote{S.~214, Kryptographie}.
+
+\emph{Key Stretching} ist eine andere solche Maßnahme.  Anstatt den
+Hashwert an sich zu nehmen, wird er mit einer hinreichend sicheren
+Anzahl an Vorgängen wiederholt bearbeitet.  Die einfachste Variante
+davon ist das Resultat der Hashfunktion erneut als Eingabe zu nutzen.
+Dadurch werden Angreifer gezwungen für jeden Versuch die gleiche
+Anzahl an Hash-Iterationen zu verwenden\footnote{S.~215,
+  Kryptographie}.
+
+\subsection{Rainbow Tables}
+
+Legt der Angreifer eine persistente Tabelle von sortierten Nachrichten
+und ihren Hashwerten an, kann er diese verwenden um bekannte Hashwerte
+schnell nachzuschlagen.  Auf diese Weise werden Bruteforce-Attacken
+auf kurze Passwörter gangbar, eine Kombination mit Wörterbuchattacken
+ist ebenfalls denkbar.  Salts und Key Stretching sind wirksame
+Abhilfen, da man durch sie größere Rainbow Tables erfordert welche
+womöglich nicht mehr praktikabel für den Angreifer
+sind\footnote{S.~215"=217, Kryptographie}.
 
 \author{Autor: Vasilij Schneidermann}
 \chapter{Signaturen}
